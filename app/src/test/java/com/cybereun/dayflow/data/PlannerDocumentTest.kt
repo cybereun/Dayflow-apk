@@ -43,4 +43,19 @@ class PlannerDocumentTest {
     @Test fun malformedDocumentDoesNotBecomeAnEmptyPlanner() {
         assertThrows(Exception::class.java){PlannerDocument("{broken",date)}
     }
+    @Test fun ddayCanBeGlobalOrLimitedToTheSelectedDate() {
+        val global=PlannerDocument.empty().day(date).addDday("발표",LocalDate.of(2026,10,10))
+        assertEquals("발표",global.day(date.plusDays(1)).ddays().single().title)
+        val perDay=global.setDdaysPerDay(true).addDday("시험",LocalDate.of(2026,10,11))
+        assertEquals("시험",perDay.ddays().single().title)
+        assertTrue(perDay.day(date.plusDays(1)).ddays().isEmpty())
+    }
+    @Test fun libraryKeepsDesktopBookMetadataAndNeverDeletesLastBook() {
+        val initial=PlannerLibrary.initial().first
+        val added=initial.add("두 번째",LocalDate.of(2026,10,7))
+        assertEquals(2,added.first.books().size)
+        assertEquals("두 번째",added.first.active()!!.name)
+        assertEquals("바꾼 이름",added.first.rename(added.second.id,"바꾼 이름").active()!!.name)
+        assertThrows(IllegalArgumentException::class.java){initial.remove(initial.active()!!.id)}
+    }
 }

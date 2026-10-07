@@ -24,4 +24,17 @@ class PlannerUiTest {
             assertTrue(WindowCompat.getInsetsController(rule.activity.window,rule.activity.window.decorView).isAppearanceLightStatusBars)
         }
     }
+    @Test fun settingsOfferPlannerDdayBackupAndEncryptedSyncControls() {
+        val name="두 번째 플래너 "+java.util.UUID.randomUUID().toString().take(6)
+        rule.waitUntil(15000){rule.onAllNodesWithText("설정").fetchSemanticsNodes().isNotEmpty()}
+        rule.onNodeWithText("설정").performClick()
+        rule.waitUntil(5000){rule.onAllNodesWithText("PLANNERS").fetchSemanticsNodes().isNotEmpty()}
+        rule.onNodeWithText("D-DAY").assertExists()
+        rule.onNodeWithText("백업 ZIP 만들기").assertExists()
+        rule.onNodeWithText("새 동기화 시작").assertExists()
+        rule.onNodeWithTag("new-book").performScrollTo().performTextInput(name)
+        rule.onNodeWithText("+ 추가").performClick()
+        rule.waitUntil(5000){rule.onAllNodesWithText(name).fetchSemanticsNodes().isNotEmpty()}
+        rule.onNodeWithText(name).assertExists()
+    }
 }

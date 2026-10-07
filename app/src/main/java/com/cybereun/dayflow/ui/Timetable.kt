@@ -27,7 +27,7 @@ import com.cybereun.dayflow.data.PlannerDocument
     var drawMode by remember{mutableStateOf(false)}
     Column {
         Row(Modifier.horizontalScroll(rememberScrollState()),horizontalArrangement=Arrangement.spacedBy(5.dp)) {
-            p.categories().forEach{c->val color=runCatching{Color(android.graphics.Color.parseColor("#"+c.hex))}.getOrDefault(accent);FilterChip(selected=category==c.id,onClick={category=c.id},label={Text(c.name,fontSize=12.sp)},colors=FilterChipDefaults.filterChipColors(selectedContainerColor=color.copy(alpha=.5f)))}
+            p.categories().forEach{c->val color=runCatching{Color(android.graphics.Color.parseColor("#"+c.hex.removePrefix("#")))}.getOrDefault(accent);FilterChip(selected=category==c.id,onClick={category=c.id},label={Text(c.name,fontSize=12.sp)},colors=FilterChipDefaults.filterChipColors(selectedContainerColor=color.copy(alpha=.5f)))}
             FilterChip(selected=category==-1,onClick={category=-1},label={Text("지우개")})
         }
         Row {Switch(drawMode,{drawMode=it});Text(if(drawMode)"연속 칠하기 · 스크롤 잠금" else "칸을 눌러 기록 · 위아래 스크롤",modifier=Modifier.padding(12.dp),fontSize=12.sp,color=Muted)}
@@ -40,7 +40,7 @@ import com.cybereun.dayflow.data.PlannerDocument
                 else detectTapGestures(onTap={paint(it)})
             }) {
                 val cellW=size.width/6;val cellH=size.height/24
-                p.slots().forEachIndexed{index,c->if(c>=0){val cat=p.categories().find{it.id==c};val color=runCatching{Color(android.graphics.Color.parseColor("#"+cat?.hex))}.getOrDefault(accent);drawRoundRect(color.copy(alpha=.8f),Offset(index%6*cellW+2,index/6*cellH+2),androidx.compose.ui.geometry.Size(cellW-4,cellH-4),androidx.compose.ui.geometry.CornerRadius(4f))}}
+                p.slots().forEachIndexed{index,c->if(c>=0){val cat=p.categories().find{it.id==c};val color=runCatching{Color(android.graphics.Color.parseColor("#"+cat?.hex?.removePrefix("#")))}.getOrDefault(accent);drawRoundRect(color.copy(alpha=.8f),Offset(index%6*cellW+2,index/6*cellH+2),androidx.compose.ui.geometry.Size(cellW-4,cellH-4),androidx.compose.ui.geometry.CornerRadius(4f))}}
                 (0..6).forEach{col->drawLine(if(col==0)Ink.copy(alpha=.5f) else Color(0xFF96B5D2).copy(alpha=.55f),Offset(col*cellW,0f),Offset(col*cellW,size.height),1f,pathEffect=if(col==0)null else PathEffect.dashPathEffect(floatArrayOf(3f,5f)))}
                 (0..24).forEach{row->drawLine(Color(0xFF96B5D2).copy(alpha=.55f),Offset(0f,row*cellH),Offset(size.width,row*cellH),1f,pathEffect=PathEffect.dashPathEffect(floatArrayOf(3f,5f)))}
             }

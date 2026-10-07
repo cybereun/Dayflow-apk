@@ -1,6 +1,8 @@
 package com.cybereun.dayflow.ui
 
 import android.app.DatePickerDialog
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,14 +17,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cybereun.dayflow.PlannerViewModel
 import com.cybereun.dayflow.R
+import com.cybereun.dayflow.data.SyncStatus
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable fun DayflowApp(model:PlannerViewModel) {
     val document by model.repository.document.collectAsStateWithLifecycle()
     val error by model.repository.error.collectAsStateWithLifecycle()
+    val library by model.library.collectAsStateWithLifecycle()
+    val sync by model.syncStatus.collectAsStateWithLifecycle()
+    val notice by model.notice.collectAsStateWithLifecycle()
     var selected by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
     var page by rememberSaveable {mutableStateOf(0)}
+    val exportBackup=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")){uri->uri?.let(model::exportBackup)}
+    val importBackup=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){uri->uri?.let(model::importBackup)}
     val date=LocalDate.parse(selected)
     val p=document?.day(date)
     val accent=Themes[p?.theme()?:0]
@@ -45,6 +53,9 @@ import java.time.format.DateTimeFormatter
                         TextButton({selected=date.plusDays(1).toString()}){Text("›",color=Ink)}
                         TextButton({selected=LocalDate.now().toString()}){Text("오늘")}
                     }
+                    library?.active()?.let { active->
+                        Text("${active.name} · ${library!!.books().size}권",color=Muted,modifier=Modifier.padding(start=20.dp,end=20.dp,bottom=4.dp),style=MaterialTheme.typography.bodySmall)
+                    }
                     BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
                         val wide=maxWidth>=840.dp
                         // Always edit the most recent repository document, not a captured UI snapshot.
@@ -53,7 +64,10 @@ import java.time.format.DateTimeFormatter
                             0->DailyScreen(p,accent,wide,change,{page=4})
                             1->WeeklyScreen(p,accent,wide,change,{selected=it.toString();page=0})
                             2->StatisticsScreen(p,accent)
-                            3->SettingsScreen(p,accent,change)
+                            3->SettingsScreen(p,accent,change,library,library?.active()?.id,sync,
+                                onSelectBook=model::selectBook,onAddBook=model::addBook,onRenameBook=model::renameBook,onDeleteBook=model::deleteBook,
+                                onExport={exportBackup.launch("Dayflow-backup.zip")},onImport={importBackup.launch(arrayOf("application/zip","application/octet-stream"))},
+                                onSync=model::syncNow,onCreateSync=model::createSync,onJoinSync=model::joinSync,onAcceptJoin=model::acceptJoin,onStartOffer=model::startOffer,onOfferRequest=model::offerRequest,onApproveOffer=model::approveOffer,onRecovery=model::recovery,onRestore=model::restore,onLeave=model::leaveSync)
                             4->TimetableScreen(p,accent,change,{page=0})
                         }
                     }
@@ -64,6 +78,7 @@ import java.time.format.DateTimeFormatter
                     }
                 }
             }
+            if(notice!=null)AlertDialog(onDismissRequest=model::clearNotice,confirmButton={TextButton(model::clearNotice){Text("확인")}},title={Text("Dayflow")},text={Text(notice!!)} )
         }
     }
 }
