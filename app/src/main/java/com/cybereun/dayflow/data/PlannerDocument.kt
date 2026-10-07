@@ -47,7 +47,39 @@ class PlannerDocument(val json:String,val date:LocalDate=LocalDate.now()) {
     fun tasks():List<TaskEntry> { val a=value().optJSONArray("tasks")?:JSONArray();return (0 until a.length()).map { val t=a.getJSONObject(it);TaskEntry(t.getString("id"),t.getString("text"),t.optInt("mark",0)) } }
     fun task(text:String):PlannerDocument {require(text.isNotBlank());return edit { d->val a=d.optJSONArray("tasks")?:JSONArray();a.put(JSONObject().put("id",UUID.randomUUID().toString().uppercase()).put("text",text.trim()).put("mark",0));d.put("tasks",a) } }
     fun editTask(id:String,text:String)=edit { d->val a=d.optJSONArray("tasks")?:JSONArray();for(i in 0 until a.length())if(a.getJSONObject(i).getString("id")==id)a.getJSONObject(i).put("text",text) }
-    fun cycleMark(id:String)=edit { d->val a=d.optJSONArray("tasks")?:JSONArray();for(i in 0 until a.length())if(a.getJSONObject(i).getString("id")==id){val t=a.getJSONObject(i);t.put("mark",(t.optInt("mark",0)+1)%5)} }
+    fun cycleMark(id:String):PlannerDocument {
+        val task=tasks().firstOrNull { it.id==id }?:return this
+        if(task.mark!=3&&task.mark!=4)return edit { d->
+            val a=d.optJSONArray("tasks")?:JSONArray()
+            for(i in 0 until a.length())if(a.getJSONObject(i).getString("id")==id){
+                val item=a.getJSONObject(i)
+                item.put("mark",(item.optInt("mark",0)+1)%5)
+            }
+        }
+
+        val next=JSONObject(json)
+        val days=next.getJSONObject("days")
+        val current=days.optJSONObject(date.toString())?:return this
+        val source=current.optJSONArray("tasks")?:return this
+        val remaining=JSONArray()
+        var postponed:JSONObject?=null
+        for(i in 0 until source.length()){
+            val item=source.getJSONObject(i)
+            if(item.getString("id")==id)postponed=JSONObject(item.toString()).put("mark",0)
+            else remaining.put(item)
+        }
+        val moved=postponed?:return this
+        current.put("tasks",remaining)
+        days.put(date.toString(),current)
+
+        val tomorrow=date.plusDays(1)
+        val destination=days.optJSONObject(tomorrow.toString())?:newDay()
+        val destinationTasks=destination.optJSONArray("tasks")?:JSONArray()
+        destinationTasks.put(moved)
+        destination.put("tasks",destinationTasks)
+        days.put(tomorrow.toString(),destination)
+        return PlannerDocument(next.toString(),date)
+    }
     fun deleteTask(id:String)=edit { d->val a=d.optJSONArray("tasks")?:JSONArray();val out=JSONArray();for(i in 0 until a.length())if(a.getJSONObject(i).getString("id")!=id)out.put(a.get(i));d.put("tasks",out) }
     fun slots():List<Int> {val a=value().optJSONArray("slots");return List(144){a?.optInt(it,-1)?:-1} }
     fun paint(index:Int,category:Int):PlannerDocument {require(index in 0..143);require(category==-1||categories().any{it.id==category});return edit { d->val a=JSONArray(slots());a.put(index,category);d.put("slots",a) } }

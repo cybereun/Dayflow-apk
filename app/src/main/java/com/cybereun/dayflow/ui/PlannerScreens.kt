@@ -87,7 +87,7 @@ typealias Edit=((PlannerDocument)->PlannerDocument)->Unit
         TextField(draft,{draft=it},Modifier.weight(1f).testTag("new-task"),placeholder={Text("할 일을 적어 주세요",color=Muted)},singleLine=true,colors=TextFieldDefaults.colors(unfocusedContainerColor=Color.Transparent,focusedContainerColor=Color.Transparent))
         TextButton({if(draft.isNotBlank()){val text=draft;edit{it.task(text)};draft=""}},Modifier.semantics{contentDescription="할 일 추가"}){Text("+",color=accent,fontSize=25.sp)}
     }
-    Text("□ 미표시   ○ 완료   △ 일부   × 못함   → 미룸",color=Muted,fontSize=12.sp,modifier=Modifier.padding(top=8.dp))
+    Text("□ 미표시   ○ 완료   △ 일부   × 못함   → 내일로",color=Muted,fontSize=12.sp,modifier=Modifier.padding(top=8.dp))
 }
 
 @Composable fun WeeklyScreen(p:PlannerDocument,accent:Color,wide:Boolean,edit:Edit,openDay:(LocalDate)->Unit) {
@@ -198,7 +198,7 @@ typealias Edit=((PlannerDocument)->PlannerDocument)->Unit
         PaperHeading("DATA",accent,"▤")
         Text("백업은 플래너 목록과 모든 책을 하나의 ZIP으로 내보냅니다. 가져오기 전 기존 기록은 앱 내부 복구 사본으로 남깁니다.",color=Muted)
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.padding(top=8.dp)){Button(onExport){Text("백업 ZIP 만들기")};OutlinedButton(onImport){Text("백업 가져오기")}}
-        Spacer(Modifier.height(24.dp));Text("Dayflow 1.0.13",color=Ink)
+        Spacer(Modifier.height(24.dp));Text("Dayflow 1.0.14",color=Ink)
         Text("자유 필기·필기 인식은 지원하지 않습니다. 연결된 동기화도 별도 백업을 대신하지 않습니다.",color=Muted,fontSize=12.sp)
     }
     if(renameId!=null)AlertDialog(onDismissRequest={renameId=null},title={Text("플래너 이름")},text={TextField(rename,{rename=it},singleLine=true)},confirmButton={TextButton({onRenameBook(renameId!!,rename);renameId=null}){Text("저장")}},dismissButton={TextButton({renameId=null}){Text("취소")}})

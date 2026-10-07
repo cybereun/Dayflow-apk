@@ -42,5 +42,5 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
     $output = Join-Path $source 'artifacts'
     New-Item -ItemType Directory -Path $output -Force | Out-Null
-    Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.13.apk') -Force
+    Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.14.apk') -Force
 } finally { Pop-Location }

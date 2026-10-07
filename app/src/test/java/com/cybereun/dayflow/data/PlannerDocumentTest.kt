@@ -15,12 +15,27 @@ class PlannerDocumentTest {
         assertEquals("06:00",PlannerDocument.slotLabel(0))
         assertEquals("05:50",PlannerDocument.slotLabel(143))
     }
-    @Test fun taskMarksCycleThroughDesktopStatesAndDelete() {
+    @Test fun taskStatusMovesPostponedTaskToNextDay() {
         val p=PlannerDocument.empty().day(date).task("한국어 할 일")
         val id=p.tasks().single().id
         var next=p
-        for (mark in listOf(1,2,3,4,0)) { next=next.cycleMark(id); assertEquals(mark,next.tasks().single().mark) }
-        assertTrue(next.deleteTask(id).tasks().isEmpty())
+        for (mark in listOf(1,2,3)) { next=next.cycleMark(id); assertEquals(mark,next.tasks().single().mark) }
+        val postponed=next.cycleMark(id)
+        assertTrue(postponed.tasks().isEmpty())
+        val moved=postponed.day(date.plusDays(1)).tasks().single()
+        assertEquals(id,moved.id)
+        assertEquals("한국어 할 일",moved.text)
+        assertEquals(0,moved.mark)
+        assertTrue(postponed.day(date.plusDays(1)).deleteTask(id).tasks().isEmpty())
+    }
+    @Test fun oldPostponedTaskMovesOnItsNextStatusTap() {
+        val initial=PlannerDocument.empty().day(date).task("이미 미룬 할 일")
+        val id=initial.tasks().single().id
+        val legacy=org.json.JSONObject(initial.json)
+        legacy.getJSONObject("days").getJSONObject(date.toString()).getJSONArray("tasks").getJSONObject(0).put("mark",4)
+        val moved=PlannerDocument(legacy.toString(),date).cycleMark(id)
+        assertTrue(moved.tasks().isEmpty())
+        assertEquals("이미 미룬 할 일",moved.day(date.plusDays(1)).tasks().single().text)
     }
     @Test fun editsKeepUnknownDesktopFields() {
         val raw="""{"days":{"2026-10-07":{"futureField":{"a":42},"memos":["","두번째","세번째"]}},"weeks":{},"prefs":{"futureSetting":true},"extension":[1,2]}"""

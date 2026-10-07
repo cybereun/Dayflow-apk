@@ -1,10 +1,13 @@
 package com.cybereun.dayflow
 
+import android.Manifest
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import androidx.core.view.WindowCompat
 
@@ -24,6 +27,14 @@ class PlannerUiTest {
         rule.runOnUiThread {
             assertTrue(WindowCompat.getInsetsController(rule.activity.window,rule.activity.window.decorView).isAppearanceLightStatusBars)
         }
+    }
+    @Test fun appHasInternetPermissionForEncryptedSync() {
+        assertTrue(rule.activity.checkSelfPermission(Manifest.permission.INTERNET)==PackageManager.PERMISSION_GRANTED)
+    }
+    @Test fun appDeclaresTheDayflowLauncherIcon() {
+        val info=rule.activity.packageManager.getApplicationInfo(rule.activity.packageName,0)
+        assertTrue(info.icon!=0)
+        assertEquals("ic_launcher",rule.activity.resources.getResourceEntryName(info.icon))
     }
     @Test fun dailyTabletUsesOpenSpreadLayout() {
         rule.runOnUiThread { rule.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
