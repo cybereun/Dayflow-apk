@@ -45,6 +45,26 @@ val Themes=listOf(Color(0xFFEE8597),Color(0xFFEFA474),Color(0xFFE7C55F),Color(0x
         }
     }
 }
+@Composable fun PlannerPage(modifier:Modifier=Modifier,content:@Composable ColumnScope.()->Unit) {
+    Surface(modifier=modifier,color=Paper,shape=RoundedCornerShape(3.dp),tonalElevation=0.dp,shadowElevation=7.dp) {
+        Box {
+            PaperTexture(Modifier.matchParentSize())
+            Column(Modifier.fillMaxSize().padding(horizontal=20.dp,vertical=12.dp),content=content)
+        }
+    }
+}
+@Composable fun VerticalBinding(modifier:Modifier=Modifier) {
+    Canvas(modifier.width(38.dp).fillMaxHeight()) {
+        val center=size.width/2
+        drawRect(Color(0xFF725D51).copy(alpha=.14f),topLeft=Offset(center-3.dp.toPx(),0f),size=androidx.compose.ui.geometry.Size(6.dp.toPx(),size.height))
+        val step=46.dp.toPx();var y=18.dp.toPx()
+        while(y<size.height) {
+            drawRoundRect(Color(0xFF765747),topLeft=Offset(center-10.dp.toPx(),y-5.dp.toPx()),size=androidx.compose.ui.geometry.Size(20.dp.toPx(),10.dp.toPx()),cornerRadius=androidx.compose.ui.geometry.CornerRadius(4.dp.toPx()))
+            drawRoundRect(brush=Brush.horizontalGradient(listOf(Color(0xFF946344),Color(0xFFF3D6B9),Color(0xFFAE7756))),topLeft=Offset(center-3.dp.toPx(),y-14.dp.toPx()),size=androidx.compose.ui.geometry.Size(6.dp.toPx(),28.dp.toPx()),cornerRadius=androidx.compose.ui.geometry.CornerRadius(3.dp.toPx()))
+            y+=step
+        }
+    }
+}
 @Composable fun PaperInput(value:String,onChange:(String)->Unit,hint:String,accent:Color,modifier:Modifier=Modifier,lines:Int=2) {
     OutlinedTextField(value,onChange,modifier.fillMaxWidth(),placeholder={Text(hint,color=Muted)},minLines=lines,shape=RoundedCornerShape(14.dp),
         colors=OutlinedTextFieldDefaults.colors(focusedBorderColor=accent,unfocusedBorderColor=accent.copy(alpha=.35f),focusedContainerColor=accent.copy(alpha=.035f),unfocusedContainerColor=accent.copy(alpha=.035f)),textStyle=LocalTextStyle.current.copy(color=Ink,fontSize=15.sp))

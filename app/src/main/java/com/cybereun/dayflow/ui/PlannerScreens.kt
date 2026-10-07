@@ -29,16 +29,23 @@ import java.time.temporal.ChronoUnit
 typealias Edit=((PlannerDocument)->PlannerDocument)->Unit
 
 @Composable fun DailyScreen(p:PlannerDocument,accent:Color,wide:Boolean,edit:Edit,openTime:()->Unit) {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal=if(wide)28.dp else 18.dp).padding(bottom=24.dp)) {
-        if(wide)Row(horizontalArrangement=Arrangement.spacedBy(28.dp)) {
-            Column(Modifier.weight(1.7f)) {DailyHeader(p,accent);Ddays(p,accent,edit);DailyNotes(p,accent,edit);TaskList(p,accent,edit);Memo(p,accent,edit)}
-            Column(Modifier.weight(1f)) {Total(p,accent);PaperHeading("TIMETABLE",accent,"◷");Timetable(p,accent,edit)}
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal=18.dp).padding(bottom=24.dp)) {
+        if(wide)Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max).testTag("daily-open-spread"),verticalAlignment=Alignment.Top) {
+            PlannerPage(Modifier.weight(1f).fillMaxHeight().testTag("daily-left-page")) {
+                DailyHeader(p,accent);Ddays(p,accent,edit);DailyNotes(p,accent,edit);TaskList(p,accent,edit);Memo(p,accent,edit)
+                Text("dayflow ♡",color=accent,modifier=Modifier.align(Alignment.End).padding(top=22.dp),fontSize=22.sp)
+            }
+            VerticalBinding(Modifier.testTag("daily-binding"))
+            PlannerPage(Modifier.weight(1f).fillMaxHeight().testTag("daily-right-page")) {
+                Total(p,accent);PaperHeading("TIMETABLE",accent,"◷");Timetable(p,accent,edit)
+                Text("dayflow ♡",color=accent,modifier=Modifier.align(Alignment.End).padding(top=22.dp),fontSize=22.sp)
+            }
         } else {
             DailyHeader(p,accent);Ddays(p,accent,edit);Total(p,accent)
             TextButton(openTime,Modifier.fillMaxWidth().background(Color(0xFFE6EDFA),RoundedCornerShape(12.dp))){Text("◷  TIMETABLE · 시간표 펼치기",color=Ink)}
             DailyNotes(p,accent,edit);TaskList(p,accent,edit);Memo(p,accent,edit)
+            Text("dayflow ♡",color=accent,modifier=Modifier.align(Alignment.End).padding(top=22.dp),fontSize=22.sp)
         }
-        Text("dayflow ♡",color=accent,modifier=Modifier.align(Alignment.End).padding(top=22.dp),fontSize=22.sp)
     }
 }
 @Composable private fun Ddays(p:PlannerDocument,accent:Color,edit:Edit) {

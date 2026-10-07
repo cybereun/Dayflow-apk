@@ -1,5 +1,6 @@
 package com.cybereun.dayflow
 
+import android.content.pm.ActivityInfo
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import org.junit.Rule
@@ -23,6 +24,13 @@ class PlannerUiTest {
         rule.runOnUiThread {
             assertTrue(WindowCompat.getInsetsController(rule.activity.window,rule.activity.window.decorView).isAppearanceLightStatusBars)
         }
+    }
+    @Test fun dailyTabletUsesOpenSpreadLayout() {
+        rule.runOnUiThread { rule.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
+        rule.waitUntil(15000){rule.onAllNodesWithTag("daily-open-spread").fetchSemanticsNodes().isNotEmpty()}
+        rule.onNodeWithTag("daily-left-page").assertExists()
+        rule.onNodeWithTag("daily-right-page").assertExists()
+        rule.onNodeWithTag("daily-binding").assertExists()
     }
     @Test fun settingsOfferPlannerDdayBackupAndEncryptedSyncControls() {
         val name="두 번째 플래너 "+java.util.UUID.randomUUID().toString().take(6)

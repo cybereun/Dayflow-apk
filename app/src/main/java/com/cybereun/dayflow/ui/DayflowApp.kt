@@ -39,8 +39,10 @@ import java.time.format.DateTimeFormatter
     MaterialTheme(colorScheme=lightColorScheme(primary=accent,onPrimary=Ink,background=Paper,surface=Paper,onSurface=Ink),typography=typography) {
         Box(Modifier.fillMaxSize()) {
             PaperTexture(Modifier.matchParentSize())
-            Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
-                Rings()
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                val wide=maxWidth>=840.dp
+                Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
+                if(page!=0||!wide)Rings()
                 if(error!=null)Text(error!!,color=MaterialTheme.colorScheme.error,modifier=Modifier.padding(12.dp))
                 if(p==null) {Box(Modifier.weight(1f).fillMaxWidth(),contentAlignment=Alignment.Center){Text(if(error==null)"플래너를 펼치는 중…" else "원본을 보존했습니다. 앱을 다시 열어 주세요.")}}
                 else {
@@ -56,8 +58,7 @@ import java.time.format.DateTimeFormatter
                     library?.active()?.let { active->
                         Text("${active.name} · ${library!!.books().size}권",color=Muted,modifier=Modifier.padding(start=20.dp,end=20.dp,bottom=4.dp),style=MaterialTheme.typography.bodySmall)
                     }
-                    BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-                        val wide=maxWidth>=840.dp
+                    Box(Modifier.weight(1f).fillMaxWidth()) {
                         // Always edit the most recent repository document, not a captured UI snapshot.
                         val change:((com.cybereun.dayflow.data.PlannerDocument)->com.cybereun.dayflow.data.PlannerDocument)->Unit={fn->model.edit{fn(it.day(date))}}
                         when(page) {
@@ -77,6 +78,7 @@ import java.time.format.DateTimeFormatter
                         }
                     }
                 }
+            }
             }
             if(notice!=null)AlertDialog(onDismissRequest=model::clearNotice,confirmButton={TextButton(model::clearNotice){Text("확인")}},title={Text("Dayflow")},text={Text(notice!!)} )
         }
