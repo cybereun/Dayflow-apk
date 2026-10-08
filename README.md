@@ -1,47 +1,79 @@
-# Dayflow Android
+# Dayflow Android · v1.0.15
 
-휴대폰과 갤럭시 탭을 하나의 APK로 지원하는 별도 Android 프로젝트.
-Windows Dayflow 저장소와 분리되어 있다.
+[![개발자 cybereun](https://img.shields.io/badge/Developer-cybereun-236f70?style=for-the-badge&logo=github)](https://github.com/cybereun)
+![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&logoColor=white)
+![버전](https://img.shields.io/badge/version-1.0.15-E0474C)
 
-## 현재 단계: 1.0.15 Android APK
+종이 플래너의 느낌을 휴대폰과 태블릿으로 옮긴 Dayflow입니다. Windows Dayflow의 디자인과 형광펜 중심 기록 방식을 유지하고 Android 터치 화면에 맞게 배치를 조정했습니다. 하나의 APK로 휴대폰과 태블릿을 지원합니다.
 
-구현: 데스크톱 Dayflow v1.0.16 렌더러를 Android에 번들해 같은 페이지·도구·탭·
-설정·동기화 UI와 동작을 사용한다. 휴대폰은 세로 일간 화면, 태블릿은 세로 한 장,
-가로 펼친 양면을 렌더러의 반응형 배치로 표시한다. 데스크톱 JSON 기록은 Room에
-저장하고 AES-256-GCM 암호화 동기화와 연결하며, 새 기기는 내용이 있는 플래너를
-자동으로 선택한다. ZIP 백업과 데스크톱과 같은 런처 아이콘도 유지한다.
+> v1.0.15는 사용자 테스트용 릴리즈입니다. 사용자가 휴대폰에서 잘 동작하는 것으로 확인했으며, 실제 태블릿과 동기화 전체 시나리오는 추가 검증이 필요합니다.
 
-자유 필기·필기 인식은 사용자 요청으로 보류한다.
+## 다운로드
 
-동기화를 시작하거나 연결할 때만 인터넷 권한을 사용한다. 동기화 데이터는
-AES-256-GCM으로 암호화되어 Dayflow 동기화 서버에 저장되며, 동기화를 쓰지
-않으면 기록은 기기에만 남는다. 앱 삭제 시 로컬 데이터가 삭제될 수 있으므로
-중요한 기록은 ZIP 백업으로 보관한다.
+[v1.0.15 릴리즈](https://github.com/cybereun/Dayflow-apk/releases/tag/v1.0.15)에서 `Dayflow-1.0.15.apk`를 내려받으세요. Android 8.0(API 26) 이상이 필요합니다.
 
-## 빌드
+같은 서명의 APK는 기존 설치 위에 업데이트할 수 있습니다. 개발용 debug APK와 release APK는 서명이 달라 설치가 거부될 수 있습니다. **기록 백업과 동기화 상태를 확인하기 전에 앱을 삭제하지 마세요.** 앱 삭제는 로컬 기록을 지울 수 있습니다.
 
-JDK17, Android SDK35, Gradle8.9. Android8.0(API26) 이상을 목표로 한다.
-표준 ASCII 로컬 경로에서는 `gradlew.bat :app:testDebugUnitTest :app:assembleDebug`.
+## 주요 특징
 
-Google Drive/한글 경로에서는 `scripts/Build-Android.ps1`로 로컬 NTFS에
-복사하여 빌드한다. `-Toolchain`과 `-StageDirectory`는 환경에 맞게 지정한다.
-이 스크립트 기본 툴체인 경로는 개발자 PC 환경용이며 저장소에 비밀은 없다.
-수정은 항상 원본 저장소에서 한다. staging 복사본을 직접 수정하지 않는다.
+- **일간:** 날짜, 코멘트, 할 일, 완료 표시, 시간표, 메모를 종이 플래너처럼 기록합니다.
+- **주간:** 한 주의 기록을 좌우로 살펴봅니다. 상단 ‘오늘’으로 이번 주의 오늘 칸으로 이동합니다.
+- **홈 통계:** 시간 정보 네 항목을 가로 한 줄로 보여주고 D-day, 연속 기록, 완료율과 기존 통계 차트를 아래로 배치합니다.
+- **형광펜:** 분류와 색상을 선택해 시간표를 기록하고 집계 대상 분류의 시간을 통계로 확인합니다.
+- **플래너 선택:** 팔레트의 플래너 버튼에서 만들어 둔 플래너를 선택합니다.
+- **휴대폰:** 세로 화면은 읽기 쉬운 크기로 표시하고 옆으로 이동해 입력합니다. 하단 필통의 펜 이름은 숨기고 선택한 펜 정보는 위에 표시합니다. 가로 화면에서는 팔레트를 오른쪽에 둡니다.
+- **태블릿:** 일간 화면을 전날·선택한 날의 두 페이지로 펼칩니다. 오늘을 선택하면 어제·오늘이 나란히 표시됩니다. 팔레트는 오른쪽에 고정됩니다. 실제 태블릿 검증은 진행 전입니다.
+- **확대:** 본문을 확대해도 팔레트와 안내창은 별도로 유지하도록 처리했습니다.
+- **로컬 기록:** Room 데이터베이스에 기록을 저장하고 기존 백업 기능을 유지합니다.
 
-디버그 산출물은 Git에서 제외한다. 정식 배포는
-`scripts/Build-Release.ps1`가 만드는 `artifacts/Dayflow-1.0.15.apk`를 쓴다.
-서명 키는 Git에 넣지 않는다.
+기기 테두리나 사진 배경을 앱에 추가하지 않습니다. Windows 앱은 이 저장소에서 수정하지 않습니다. 자유 필기·필기 인식은 보류 중이며 상단 실행 취소·다시 실행 버튼은 현재 비활성 상태입니다.
 
-## 검증
+## Windows ↔ Android 동기화
 
-- 단위 테스트: `:app:testDebugUnitTest` (13개).
-- 디바이스 테스트: `:app:connectedDebugAndroidTest` 또는 adb instrumentation.
-  데이터베이스 재오픈, 손상 레코드 보존, 할 일 입력/Activity 재생성,
-  밝은 종이 위 시스템 아이콘 가독성, 인터넷 권한, 런처 아이콘, 태블릿 양면
-  배치 (8개).
-- API35 에뮬레이터 휴대폰 및1600x1000/density160 탭형 화면에서 검증한다.
-  실물 갤럭시/S펜 검증은 아직 하지 않았다.
+Android 앱 버전은 **v1.0.15**, Windows 동기화 기준은 **Dayflow v1.0.17**입니다. 번호가 달라도 같은 동기화 프로토콜을 사용하도록 구성했습니다.
 
-문서: `docs/superpowers/specs/2026-10-07-dayflow-android-design.md`,
-`docs/superpowers/plans/2026-10-07-android-foundation.md`, `docs/progress.md`.
-글꼴 라이선스: `licenses/PoorStory-OFL.txt`.
+### 동기화 원리
+
+1. 첫 기기에서 동기화 그룹을 만들고 복구 코드를 안전하게 보관합니다.
+2. 기존 기기에서 연결 코드를 발급하고 새 기기에서 입력합니다. 승인 절차를 거쳐 같은 그룹에 연결합니다.
+3. 플래너 기록은 기기에서 암호화된 뒤 Cloudflare 서버로 전달됩니다. 서버는 암호문을 중계·보관하고 연결된 기기는 내려받은 기록을 복호화해 로컬 기록에 반영합니다.
+4. 원본 엔진의 변경·삭제 병합 규칙을 사용합니다. 연결하지 않은 다른 사용자의 그룹과 기록을 공유하는 구조가 아닙니다.
+
+Windows v1.0.17의 원본 동기화 엔진을 Android에 번들하고 Android 저장소·인증 정보·화면에 연결했습니다. 이전 Kotlin 동기화 엔진은 활성 경로에서 실행하지 않습니다. 서버는 기존 Cloudflare `/original` API를 사용하고 Android WebView 요청을 허용하는 연결 정책을 추가했습니다.
+
+### 보안과 주의사항
+
+- Android 키·기기 인증 정보는 Android Keystore 기반 보호 저장소로 암호화해 보관합니다. Windows는 Windows 보호 저장소를 사용합니다.
+- 복구 코드는 기록에 접근할 수 있는 비밀입니다. 다른 사람에게 보내거나 공개 저장소에 올리지 마세요.
+- 동기화를 사용하지 않으면 기록은 기본적으로 기기에 남습니다. 서버 연결에는 인터넷이 필요합니다.
+- 기록 암호화가 모든 메타데이터를 숨기는 것은 아닙니다. 서버는 그룹·기기 식별자 등 운영에 필요한 정보를 처리할 수 있습니다.
+- 동기화는 백업을 대신하지 않습니다. 중요한 기록은 별도 백업을 유지하세요.
+
+### 검증 상태
+
+확인: APK 빌드·휴대폰 설치, 주요 휴대폰 화면 배치와 플래너 선택창, 원본 엔진 연결 테스트 3개, 서버 연결 정책 테스트 4개. 사용자가 휴대폰에서 잘 동작하는 것으로 확인했습니다.
+
+추가 확인: Windows ↔ Android 양방향 수정·삭제, 오프라인 병합, 복구, 다른 그룹 격리, 실제 태블릿 입력. 기존 Kotlin 단위 테스트에는 클래스 로딩 문제가 남아 있으며 전체 테스트 통과 상태가 아닙니다.
+
+## v1.0.15 릴리즈 스토리
+
+이번 버전은 Windows Dayflow의 디자인과 기록 방식을 Android에서 이어 쓰기 위한 사용자 테스트 버전입니다. 별도의 모바일 디자인 대신 기존 플래너를 재사용하고, 휴대폰에서 작게 보이던 본문·날짜·쓰기·시간 버튼을 조정했습니다.
+
+설정 메뉴가 가려지는 문제를 정리하고 좁은 필통에서는 펜 이름을 제거해 선택 공간을 확보했습니다. 플래너 목록 표시를 연결하고 태블릿에는 전날·선택한 날을 펼치는 배치를 추가했습니다.
+
+동기화는 기존 Android 구현 대신 Windows v1.0.17의 원본 엔진과 같은 Cloudflare 서버를 사용하는 방향으로 전환했습니다. 실제 휴대폰·태블릿에서 배치와 입력, Windows와의 동기화를 함께 테스트하는 것이 이번 릴리즈의 목적입니다. 목업은 실제 실행 화면이나 검증 결과가 아닙니다.
+
+## 개발 및 빌드
+
+JDK 17 · Android SDK 35 · Gradle 8.9. 서명 키와 비밀번호는 저장소에 포함하지 않습니다.
+
+```powershell
+node scripts/Test-OriginalSyncBridge.cjs
+node --test sync-server/cors.test.mjs
+gradle :app:assembleDebug
+powershell -ExecutionPolicy Bypass -File scripts/Build-Release.ps1
+```
+
+릴리즈 스크립트는 저장소 안에서 빌드하고 로컬 보호 저장소의 서명 키를 사용합니다. 결과는 `artifacts/Dayflow-1.0.15.apk`입니다. 다른 툴체인 환경에서는 `-Toolchain`을 지정하세요. 빌드 성공과 동작 검증은 별개입니다.
+
+상세 문서: [Android 동기화 연동](docs/android-v17-integration.md). 글꼴 라이선스: [PoorStory OFL](licenses/PoorStory-OFL.txt).
