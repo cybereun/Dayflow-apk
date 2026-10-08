@@ -1,0 +1,1 @@
+:root{--sd-press-spring:cubic-bezier(.3, 1.4, .5, 1);--sd-press-scale:.9}.sd-press{transition:transform .22s var(--sd-press-spring)}.sd-press:is(:active,[data-pressed]):not(:disabled):not([aria-disabled=true]){transform:scale(var(--sd-press-scale));transition-duration:80ms}@media (prefers-reduced-motion:reduce){.sd-press,.sd-press:is(:active,[data-pressed]){transition:none}}

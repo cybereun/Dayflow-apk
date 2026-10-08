@@ -1,0 +1,82 @@
+/* Adapt containers only; original planner and palette controls remain unchanged. */
+@media (max-width: 600px) {
+  body[data-android-view="settings"] #root > div {
+    flex-direction: column !important;
+  }
+  body[data-android-view="settings"] nav[aria-label="설정 항목"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex-shrink: 0;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: start;
+    padding: 8px !important;
+    gap: 4px;
+  }
+  body[data-android-view="settings"] nav[aria-label="설정 항목"] button {
+    width: 100% !important;
+    flex-shrink: 0;
+    min-width: 0;
+    min-height: 40px;
+    margin: 0 !important;
+    padding: 6px !important;
+    gap: 5px !important;
+    font-size: 11px !important;
+    white-space: nowrap;
+  }
+  body[data-android-view="settings"] #root > div > div {
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 16px !important;
+    flex: 1;
+    overflow-y: auto;
+  }
+}
+#android-palette { position:fixed; z-index:800; }
+@media (orientation: portrait) and (max-width:599px) {
+  #android-palette .pal-pen {width:34px !important;min-width:34px !important;padding-left:0 !important;padding-right:0 !important;margin-left:0 !important;margin-right:0 !important;overflow:visible !important;}
+  #android-palette .android-pen-label {display:none !important;}
+  .android-selected-pen {position:absolute;top:-26px;left:50%;transform:translateX(-50%);max-width:90%;padding:3px 12px;border:1px solid;border-radius:12px;background:#fffdf8;color:#34343a;font:700 12px var(--font-ui);white-space:nowrap;box-shadow:0 1px 6px #00000016;z-index:2;}
+  #android-palette { left:0; right:0; bottom:0; }
+  #android-palette > .pal {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+  #android-palette .pal-card {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    flex-shrink: 0;
+    margin: 0 !important;
+  }
+}
+@media (orientation: landscape), (min-width:600px) and (min-height:600px) {
+  #android-palette { top:0; right:0; bottom:0; width:76px; }
+  #android-palette > .pal {
+    position:relative !important;
+    inset:auto !important;
+    width:100% !important;
+    height:100% !important;
+    overflow-y:auto;
+    overflow-x:hidden;
+    align-items:flex-start !important;
+    justify-content:flex-start !important;
+  }
+  #android-palette .pal-card {
+    position:relative !important;
+    inset:auto !important;
+    transform:none !important;
+    margin:0 !important;
+    flex-shrink:0;
+  }
+}

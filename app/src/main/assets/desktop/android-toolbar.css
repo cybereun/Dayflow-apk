@@ -1,0 +1,9 @@
+#android-toolbar { position:fixed;left:0;right:0;top:0;height:48px;z-index:850;box-sizing:border-box;padding:5px 8px;background:#fcfbf7; }
+.android-toolbar-inner {height:38px;display:flex;align-items:center;gap:4px;padding:0 5px;border-radius:20px;background:#f5f3eb;box-shadow:0 2px 8px #00000014;font-family:var(--font-ui);color:#34343a;}
+.android-toolbar-inner button {border:0;background:transparent;border-radius:16px;min-height:34px;padding:0 7px;font:700 14px var(--font-ui);color:inherit;white-space:nowrap;}
+.android-toolbar-inner button.active {background:#236f70;color:white;}
+.android-toolbar-inner button:disabled {opacity:.3;}
+.android-toolbar-date {display:flex;flex-direction:column;font-size:14px;line-height:1.2;font-weight:700;white-space:nowrap;}
+.android-toolbar-date small {font-size:10px;line-height:1.2;color:#e0474c;}
+.android-toolbar-spacer {flex:1;}
+.android-toolbar-book {flex:1;min-width:0;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;font-size:11px;text-align:center;}

@@ -21,6 +21,6 @@ try {
     if (Test-Path -LiteralPath $apk) {
         $output = Join-Path $source 'artifacts'
         New-Item -ItemType Directory -Path $output -Force | Out-Null
-        Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-0.1.0-debug.apk') -Force
+        Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.15-debug.apk') -Force
     }
 } finally { Pop-Location }

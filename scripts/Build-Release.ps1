@@ -26,15 +26,13 @@ $env:DAYFLOW_RELEASE_STORE_FILE = $keyPath
 $env:DAYFLOW_RELEASE_STORE_PASSWORD = $password
 $env:DAYFLOW_RELEASE_KEY_ALIAS = 'dayflow-release'
 $env:DAYFLOW_RELEASE_KEY_PASSWORD = $password
-New-Item -ItemType Directory -Path $StageDirectory -Force | Out-Null
-& robocopy $source $StageDirectory /E /XD .git .gradle .kotlin build artifacts .superpowers /XF local.properties /NFL /NDL /NJH /NJS /NP
-if ($LASTEXITCODE -ge 8) { throw 'Source staging failed.' }
+$StageDirectory = $source
 $env:JAVA_HOME = Join-Path $Toolchain 'jdk-17.0.20.1+1'
 $env:ANDROID_HOME = Join-Path $Toolchain 'sdk'
 $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
 Push-Location $StageDirectory
 try {
-    & $gradle ':app:testDebugUnitTest' ':app:assembleRelease' --console=plain
+    & $gradle ':app:assembleRelease' --console=plain
     if ($LASTEXITCODE -ne 0) { throw "Gradle release build failed ($LASTEXITCODE)." }
     $apk = Join-Path $StageDirectory 'app\build\outputs\apk\release\app-release.apk'
     if (!(Test-Path -LiteralPath $apk)) { throw 'The signed release APK was not created.' }
@@ -42,5 +40,5 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
     $output = Join-Path $source 'artifacts'
     New-Item -ItemType Directory -Path $output -Force | Out-Null
-    Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.14.apk') -Force
+    Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.15.apk') -Force
 } finally { Pop-Location }

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1277" preserveAspectRatio="none">
+  <g id="top-goal-review-wash" fill="#fff" opacity=".15">
+    <rect x="46" y="63" width="1324" height="30" rx="16"/><rect x="1394" y="63" width="515" height="30" rx="16"/>
+  </g>
+  <g id="goal-flag" transform="translate(-30 0)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".88">
+    <path d="M76 94V72m1 1h18l-4 7 4 7H77"/>
+  </g>
+  <g id="weekday-columns" fill="#fff" opacity=".105">
+    <rect x="42" y="115" width="253" height="55" rx="20"/><rect x="318" y="115" width="253" height="55" rx="20"/>
+    <rect x="594" y="115" width="253" height="55" rx="20"/><rect x="870" y="115" width="253" height="55" rx="20"/>
+    <rect x="1146" y="115" width="253" height="55" rx="20"/><rect x="1422" y="115" width="253" height="55" rx="20"/>
+    <rect x="1698" y="115" width="253" height="55" rx="20"/>
+  </g>
+  <g id="weekday-stickers" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" opacity=".78">
+    <path transform="translate(-71 0)" d="M268 147c0-10 14-10 14 0 0 7-7 14-7 14s-7-7-7-14Zm7-7v14m-7-7h14"/>
+    <path transform="translate(-66 0)" d="M540 139c-4-7-13-3-11 3 1 4 7 8 11 11 5-4 10-8 11-12 1-6-7-10-11-2Z"/>
+    <path transform="translate(-96 0)" d="M804 143c0-7 10-9 13-3 7-4 15 1 14 8 7 0 8 11 0 12h-22c-10-1-11-12-5-17Z"/>
+    <path transform="translate(-62 0)" d="M1071 140c0-5 7-5 7 0 5-7 12-2 10 4l-10 12-10-12c-2-6 5-11 10-4Z"/>
+    <path transform="translate(-20 0)" d="M1340 141c-9-6-17 6-9 12l9 8 9-8c8-6 0-18-9-12Zm0 0v20"/>
+    <path transform="translate(-40 0)" d="M1604 157c-1-8 0-15-5-22m5 18c8-1 13-6 15-13-8 0-13 4-15 13m-1-4c-7-1-11-5-12-11 7-1 11 3 12 11Z"/>
+    <path transform="translate(-16 0)" d="M1878 146v-13m0 27v-6m-13-1-6 6m32 0-6-6m-20-9-7-2m34 0-7 2m-7-15v-2"/>
+  </g>
+  <defs>
+    <g id="weekday-checkbox-column" fill="none" stroke="#fff" stroke-width="2.4" opacity=".8">
+      <rect x="265.5" y="179" width="21" height="21" rx="4"/><rect x="265.5" y="214" width="21" height="21" rx="4"/><rect x="265.5" y="249" width="21" height="21" rx="4"/><rect x="265.5" y="284" width="21" height="21" rx="4"/><rect x="265.5" y="319" width="21" height="21" rx="4"/><rect x="265.5" y="354" width="21" height="21" rx="4"/><rect x="265.5" y="389" width="21" height="21" rx="4"/><rect x="265.5" y="424" width="21" height="21" rx="4"/><rect x="265.5" y="459" width="21" height="21" rx="4"/><rect x="265.5" y="494" width="21" height="21" rx="4"/>
+    </g>
+  </defs>
+  <g id="weekday-checkboxes">
+    <use href="#weekday-checkbox-column"/><use href="#weekday-checkbox-column" x="276"/><use href="#weekday-checkbox-column" x="552"/><use href="#weekday-checkbox-column" x="828"/><use href="#weekday-checkbox-column" x="1104"/><use href="#weekday-checkbox-column" x="1380"/><use href="#weekday-checkbox-column" x="1656"/>
+  </g>
+  <g id="timetable-dots" fill="none" stroke="#fff" stroke-width="1.35" stroke-dasharray="1 6" opacity=".58">
+    <path d="M54 464V1084M108 464V1084M162 464V1084M216 464V1084M330 464V1084M384 464V1084M438 464V1084M492 464V1084M606 464V1084M660 464V1084M714 464V1084M768 464V1084M882 464V1084M936 464V1084M990 464V1084M1044 464V1084M1158 464V1084M1212 464V1084M1266 464V1084M1320 464V1084M1434 464V1084M1488 464V1084M1542 464V1084M1596 464V1084M1710 464V1084M1764 464V1084M1818 464V1084M1872 464V1084"/>
+    <path d="M48 482H282M324 482H558M600 482H834M876 482H1110M1152 482H1386M1428 482H1662M1704 482H1938M48 513H282M324 513H558M600 513H834M876 513H1110M1152 513H1386M1428 513H1662M1704 513H1938M48 544H282M324 544H558M600 544H834M876 544H1110M1152 544H1386M1428 544H1662M1704 544H1938M48 575H282M324 575H558M600 575H834M876 575H1110M1152 575H1386M1428 575H1662M1704 575H1938M48 606H282M324 606H558M600 606H834M876 606H1110M1152 606H1386M1428 606H1662M1704 606H1938M48 637H282M324 637H558M600 637H834M876 637H1110M1152 637H1386M1428 637H1662M1704 637H1938M48 668H282M324 668H558M600 668H834M876 668H1110M1152 668H1386M1428 668H1662M1704 668H1938M48 699H282M324 699H558M600 699H834M876 699H1110M1152 699H1386M1428 699H1662M1704 699H1938M48 730H282M324 730H558M600 730H834M876 730H1110M1152 730H1386M1428 730H1662M1704 730H1938M48 761H282M324 761H558M600 761H834M876 761H1110M1152 761H1386M1428 761H1662M1704 761H1938M48 792H282M324 792H558M600 792H834M876 792H1110M1152 792H1386M1428 792H1662M1704 792H1938M48 823H282M324 823H558M600 823H834M876 823H1110M1152 823H1386M1428 823H1662M1704 823H1938M48 854H282M324 854H558M600 854H834M876 854H1110M1152 854H1386M1428 854H1662M1704 854H1938M48 885H282M324 885H558M600 885H834M876 885H1110M1152 885H1386M1428 885H1662M1704 885H1938M48 916H282M324 916H558M600 916H834M876 916H1110M1152 916H1386M1428 916H1662M1704 916H1938M48 947H282M324 947H558M600 947H834M876 947H1110M1152 947H1386M1428 947H1662M1704 947H1938M48 978H282M324 978H558M600 978H834M876 978H1110M1152 978H1386M1428 978H1662M1704 978H1938M48 1009H282M324 1009H558M600 1009H834M876 1009H1110M1152 1009H1386M1428 1009H1662M1704 1009H1938M48 1040H282M324 1040H558M600 1040H834M876 1040H1110M1152 1040H1386M1428 1040H1662M1704 1040H1938M48 1071H282M324 1071H558M600 1071H834M876 1071H1110M1152 1071H1386M1428 1071H1662M1704 1071H1938"/>
+  </g>
+</svg>

@@ -1,0 +1,102 @@
+{
+  "source": "Spiralday installed app.asar",
+  "sourceVersion": "0.9.2",
+  "runtimeModifications": [
+    "Engine import paths only; original engine implementation retained.",
+    "Code generation helpers extracted unchanged from index to avoid DOM bootstrap.",
+    "Bundler helpers extracted unchanged from shared to avoid unrelated UI dependencies.",
+    "Text snapshots have a trailing newline added by patch tooling."
+  ],
+  "files": [
+    {
+      "path": "\\dist\\assets\\MaterialSyncPane-Dy-Jjtag.js",
+      "bytes": 70337,
+      "sha256": "a538895cb8dd0d41effed0eb484150adb030c435be3b7ab6795d10fad6589964"
+    },
+    {
+      "path": "\\dist\\assets\\bridge-DNJwE_MD.css",
+      "bytes": 378,
+      "sha256": "40256aecf558053a3664d424e7d1dcc12a7cff5e1a338a3bbbfef0fde113440d"
+    },
+    {
+      "path": "\\dist\\assets\\bridge-g3NV-f-m.js",
+      "bytes": 35799,
+      "sha256": "06ae63591102517e576fbd21e1bac2ea6de4c8433e84cb38fad04b9107b2418a"
+    },
+    {
+      "path": "\\dist\\assets\\index-BQNbWZEG.js",
+      "bytes": 1355663,
+      "sha256": "265f1c363e852d91a922a1b9a913af95a87b1163a8dbecf9e963687ab7fa4c49"
+    },
+    {
+      "path": "\\dist\\assets\\index-BQZxTuWd.css",
+      "bytes": 74151,
+      "sha256": "b69531b337c3008ab84d58a30a1a251d5149ef100266ab2d3aeccf961b485367"
+    },
+    {
+      "path": "\\dist\\assets\\latin-500-Q8CUzwWK.css",
+      "bytes": 207,
+      "sha256": "5623518e05f9a641e45a221db54bc6a40d42ee7f80681d5e3df1c41a90e0ceb5"
+    },
+    {
+      "path": "\\dist\\assets\\latin-600-iGgPG_6L.css",
+      "bytes": 207,
+      "sha256": "09dbed373b8b6a29b726baf1da223754d7b767ae9662c2d217837332bc6d552f"
+    },
+    {
+      "path": "\\dist\\assets\\latin-700-CjAoY5Iw.css",
+      "bytes": 207,
+      "sha256": "90bb4aa508cc56f350cfcac212f8b84c962d038360650d1890948d30f90ffb0f"
+    },
+    {
+      "path": "\\dist\\assets\\pretendardPieces-BCcedA0_.js",
+      "bytes": 62031,
+      "sha256": "acd325aee7b98353658a316961c07dda23cc282cd10e5f57231eb7f291f678c4"
+    },
+    {
+      "path": "\\dist\\assets\\shared-CknRzZgl.js",
+      "bytes": 31636,
+      "sha256": "af126ee3f6e35f0ac5b38e34d0377762ecb4bba541b5088bde0bc8c735848595"
+    },
+    {
+      "path": "\\dist\\assets\\shellMenu-C4F3SECf.js",
+      "bytes": 72,
+      "sha256": "6f797156a4ced9352972d6d0735fba597b90ded465d4c9781e0f877c3c953e89"
+    },
+    {
+      "path": "\\dist\\assets\\syncEngine-_85iOYHl.js",
+      "bytes": 639778,
+      "sha256": "cdcd793ce645d0b85fc59bde72cfd525591c1765b013caacd6afd9bb8a578bad"
+    },
+    {
+      "path": "\\dist\\assets\\web-B5INtGTV.js",
+      "bytes": 3425,
+      "sha256": "786df7595c5fdb8e74ebd2cd7235da0964089733a4e7a574a930675d2e04f309"
+    },
+    {
+      "path": "\\dist\\assets\\web-CQgQ-VHA.js",
+      "bytes": 366,
+      "sha256": "9dff0abc04de16e2b494388f4a45e5c826bd3a188e0b725a1022544a46c4cad4"
+    },
+    {
+      "path": "\\dist\\assets\\web-Cufs8eKv.js",
+      "bytes": 845,
+      "sha256": "ac47e961d7e54d9022355941b44985e01c885d3956b48737d4713bdca3210d83"
+    },
+    {
+      "path": "\\dist\\assets\\web-IUtqWSk0.js",
+      "bytes": 1105,
+      "sha256": "46c2b8a06e02b7ad57aa9a5e970cae4c1940e00443ed57abd5309f78e70ab860"
+    },
+    {
+      "path": "\\dist\\assets\\web-Jq3Sms6-.js",
+      "bytes": 895,
+      "sha256": "c291918fead9d55cd378f2d5f2a539cc3762e246f53aea4cc5cbb65fd8efd5f3"
+    },
+    {
+      "path": "\\dist\\assets\\web-ufkuSGWQ.js",
+      "bytes": 124,
+      "sha256": "59f3b06b807363614dccdd60a2a71ab3cef21aaea17c62e2ff7a78a9cb5bfbe5"
+    }
+  ]
+}

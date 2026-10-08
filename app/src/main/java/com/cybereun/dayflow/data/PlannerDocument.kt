@@ -16,7 +16,7 @@ class PlannerLibrary(val json:String) {
     private val root=JSONObject(json).also { require(it.optJSONArray("books")!=null){"플래너 목록 형식이 올바르지 않습니다."} }
     private fun edit(action:(JSONObject)->Unit):PlannerLibrary { val next=JSONObject(json);action(next);return PlannerLibrary(next.toString()) }
     fun books():List<BookInfo> { val a=root.getJSONArray("books");return (0 until a.length()).map { i->
-        val b=a.getJSONObject(i);BookInfo(b.getString("id").uppercase(),b.optString("name","새 플래너"),LocalDate.parse(b.optString("start",LocalDate.now().toString())),b.optInt("cover",0).coerceIn(0,8),b.optString("created",LocalDate.now().toString()),b.optBoolean("isSample",false))
+        val b=a.getJSONObject(i);BookInfo(b.getString("id").uppercase(),b.optString("name","새 플래너"),LocalDate.parse(b.optString("start",LocalDate.now().toString()).take(10)),b.optInt("cover",0).coerceIn(0,8),b.optString("created",LocalDate.now().toString()),b.optBoolean("isSample",false))
     } }
     fun activeId():String?=root.optString("activeID","").ifBlank{null}?.uppercase()
     fun active():BookInfo?=books().firstOrNull{it.id==activeId()}?:books().firstOrNull()

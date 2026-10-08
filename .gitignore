@@ -8,3 +8,7 @@ local.properties
 .superpowers/
 artifacts/
 captures/
+.wrangler/
+**/.wrangler/
+.env
+.env.*

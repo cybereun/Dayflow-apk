@@ -6,11 +6,11 @@ android {
         applicationId = "com.cybereun.dayflow"
         minSdk = 26
         targetSdk = 35
-        versionCode = 14
-        versionName = "1.0.14"
+        versionCode = 15
+        versionName = "1.0.15"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
     val releaseStore=System.getenv("DAYFLOW_RELEASE_STORE_FILE")
@@ -35,6 +35,7 @@ android {
     } }
 }
 dependencies {
+    implementation("androidx.webkit:webkit:1.12.1")
     implementation(platform("androidx.compose:compose-bom:2024.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")

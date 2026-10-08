@@ -1,0 +1,67 @@
+/* Reference artwork is used as a sprite; each control retains its original handler. */
+.pal-col { width: 78px; padding: 12px 8px; gap: 8px; }
+/* Keep the original book selector at its original size. Scale artwork controls
+   together so sprite crops, hit areas and layout agree within the 62px body. */
+.pal-col > .pal-stack,
+.pal-col > [data-tour=concept],
+.pal-col > .pal-tools,
+.pal-col > .pal-settings { zoom: 0.5740740741; }
+.pal-card { background: linear-gradient(145deg,#fbfdff,#eaf0f8); border-radius: 25px; box-shadow: 0 4px 10px #17365b26,inset 0 0 0 1px #ffffffdd; }
+.pal-col .pal-kind { height: 72px; min-height: 72px; border-radius: 20px !important; position: relative; font-size: 14px; color: #344458 !important; background: linear-gradient(#fff,#e6edf9) !important; box-shadow: inset 0 1px 2px #fff,0 2px 4px #8795b433; }
+.pal-col .pal-kind > svg { visibility: hidden; }
+.pal-col .pal-kind::before { content: ''; position: absolute; width: 54px; height: 39px; top: 7px; left: calc(50% - 27px); background-image: url('./palette-reference.png'); background-repeat: no-repeat; }
+.pal-col .pal-kind[data-tour=home]::before { background-position: -66px -18px; }
+.pal-col .pal-kind[data-tour=weekly]::before { background-position: -66px -94px; }
+.pal-col .pal-kind[data-tour=daily]::before { background-position: -66px -173px; }
+.pal-col .pal-kind { justify-content: flex-end; padding-bottom: 8px; }
+.pal-col .pal-kind.on { background: linear-gradient(135deg,#b65aff,#7231e4) !important; color: white !important; box-shadow: inset 0 1px 3px #d6a1ff,0 3px 5px #7944bd45; }
+.pal-col .pal-kind.on[data-tour=home]::before,.pal-col .pal-kind.on[data-tour=weekly]::before { filter: brightness(1.05); }
+.pal-col .pal-arrows { gap: 8px; }
+.pal-col .pal-arrows button { height: 45px; border-radius: 16px; background: linear-gradient(#fff,#e5ecf7); box-shadow: inset 0 1px 1px #fff,0 2px 4px #8393b433; }
+.pal-col .pal-arrows svg { width: 20px; height: 20px; }
+.pal-col .pal-small { height: 47px !important; border-radius: 17px; font-size: 14px !important; color: #35465a; background: linear-gradient(#fff,#e6edf9); box-shadow: inset 0 1px 1px #fff,0 2px 4px #8393b433; }
+.pal-col .pal-small[data-tour=today]::before { content:''; width:36px; height:38px; background:url('./palette-reference.png') -45px -312px no-repeat; }
+.pal-col .pal-small[data-tour=dday] > svg { display:none !important; }
+.pal-col .pal-small[data-tour=dday]::before { content:''; width:29px; height:34px; background:url('./palette-reference.png') -52px -369px no-repeat; }
+.pal-col .pal-concept-label { font-size:14px; color:#35465a; margin:3px 0 12px; }
+.pal-col .pal-dots { grid-template-columns:repeat(3,28px); gap:10px; margin-top:0; }
+.pal-col .pal-dot { width:28px; height:28px; box-shadow:inset 1px 2px 4px #ffffff75,inset -1px -2px 4px #00000012,0 2px 4px #6b7a9630; }
+.pal-col .pal-dot.on::after { inset:-3px; box-shadow:0 0 0 2px #31465b; }
+.pal-col .pal-dot .def { background:#24374a; border-radius:50%; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; }
+.pal-col .pal-divider { background:#cbd5e3; margin:4px 2px; }
+.pal-col .pal-tools { gap:10px; }
+.pal-col .pal-tools [data-tour=pens] { gap:11px !important; }
+.pal-col .pal-pen { height:65px; min-height:65px; gap:5px; }
+.pal-col .pal-pen .art { width:104px; height:36px; }
+.pal-col .pal-pen .art > div { width:104px !important; height:36px !important; }
+.pal-col .pal-pen .art svg { width:104px; height:36px; }
+.pal-col .pal-pen .label { max-width:108px; color:#35465a; font-size:14px; font-weight:550; }
+.pal-col .pal-pen.on .label { color:#25364b; }
+.pal-col .pal-pen.eraser { height:53px; min-height:53px; }
+.pal-col .eraser .art { position:relative; width:80px; height:30px; background:url('./palette-reference.png') -53px -1157px no-repeat; }
+.pal-col .eraser .art > div { visibility:hidden; }
+.pal-col .pal-chips { gap:8px; }
+.pal-col .pal-chip { height:79px; border-radius:16px; font-size:14px; font-weight:550; justify-content:flex-end; padding-bottom:9px; position:relative; background:linear-gradient(#fff,#e6edf9); box-shadow:inset 0 1px 1px #fff,0 2px 4px #8393b433; color:#35465a !important; }
+.pal-col .pal-chip > svg { visibility:hidden; }
+.pal-col .pal-chip::before { content:''; width:37px; height:42px; position:absolute; top:8px; left:calc(50% - 18.5px); background-image:url('./palette-reference.png'); background-repeat:no-repeat; }
+.pal-col .pal-chip[data-tour=text]::before { background-position:-45px -1228px; }
+.pal-col .pal-chip[data-tour=meal]::before { background-position:-105px -1230px; }
+.pal-col .pal-chip.on { background:linear-gradient(#d3c5ff,#b896f3) !important; box-shadow:0 0 0 2px #9b68e0; }
+.pal-col .pal-settings { height:76px; min-height:76px; border-radius:19px; background:linear-gradient(#fff,#e6edf9); box-shadow:inset 0 1px 2px #fff,0 2px 4px #8393b433; }
+.pal-col .pal-settings > * { display:none !important; }
+.pal-col .pal-settings::before { content:''; width:50px; height:52px; background:url('./palette-reference.png') -69px -1320px no-repeat; }
+.pal-col .pal-collapse { z-index:2; }
+.pal-col .pal-kind[data-tour=home]::before { clip-path: polygon(8px 16px,20px 16px,20px 8px,32px 8px,32px 0,47px 0,47px 37px,8px 37px); }
+.pal-col .pal-kind[data-tour=weekly]::before { clip-path: inset(4px 9px 0 9px round 6px); }
+.pal-col .pal-kind[data-tour=daily]::before { clip-path: polygon(10px 5px,36px 5px,36px 0,54px 0,54px 37px,10px 37px); }
+.pal-col .pal-dot:nth-child(1) { background:linear-gradient(135deg,#ff6975,#ff293d) !important; }
+.pal-col .pal-dot:nth-child(2) { background:linear-gradient(135deg,#ffc079,#ff9234) !important; }
+.pal-col .pal-dot:nth-child(3) { background:linear-gradient(135deg,#ffe56a,#ffc313) !important; }
+.pal-col .pal-dot:nth-child(4) { background:linear-gradient(135deg,#96f3ec,#33d4d0) !important; }
+.pal-col .pal-dot:nth-child(5) { background:linear-gradient(135deg,#87ceff,#4395ff) !important; }
+.pal-col .pal-dot:nth-child(6) { background:linear-gradient(135deg,#7183ff,#354eec) !important; }
+.pal-col .pal-dot:nth-child(7) { background:linear-gradient(135deg,#c98dff,#9754f0) !important; }
+.pal-col .pal-dot:nth-child(8) { background:linear-gradient(135deg,#ffa0da,#eb60bc) !important; }
+.pal-col .pal-dot:nth-child(9) { background:linear-gradient(135deg,#888d93,#3d4248) !important; }
+.pal-row .pal-kind,.pal-row .pal-chip,.pal-row .pal-settings { background:linear-gradient(#fff,#e3eafa) !important; box-shadow:0 2px 3px #8795b433; }
+.pal-row .pal-kind.on,.pal-row .pal-chip.on { background:linear-gradient(#b65aff,#7231e4) !important; }

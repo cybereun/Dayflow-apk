@@ -1,0 +1,1 @@
+import{s as e}from"./bridge-g3NV-f-m.js";var t=class extends e{async show(e){}async hide(e){}};export{t as SplashScreenWeb};

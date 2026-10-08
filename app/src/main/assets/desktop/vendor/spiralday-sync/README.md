@@ -1,0 +1,9 @@
+# Original Windows sync port
+
+Source: user-owned installed Spiralday 0.9.2 app.asar. See manifest.json for source hashes. The engine, crypto, merge logic and dependency assets are original. runtime/assets/index-BQNbWZEG.js is formatted for auditability; application bootstrap is removed, native controller/UI/typing hint/unload entry points exported, sync commands routed to Dayflow IPC, server fixed to Dayflow /original, and visible product names changed to Dayflow. Original protocol identifiers and QR parsing are retained.
+
+Dayflow adapts its existing planner store and Electron bridge. Original engine runs in the renderer as in the original Windows app; keys are transiently present there. Persistent credentials are encrypted by Electron safeStorage in the main process. This deliberately supersedes the initial main-process-only engine assumption to honor the requested exact original engine/controller integration. CSP permits only local code and the fixed Dayflow Cloudflare endpoint. Other settings/planner design are not replaced by the native app bootstrap.
+
+The installed client does not contain the original Worker source. The Dayflow Cloudflare Worker implements the original HttpTransport/WebSocket contract, rather than claiming to be a byte-identical server copy. Legacy groups are kept separate, backed up and write-frozen on explicit migration; a final post-freeze pull prevents losing concurrent old-device writes. Backups are required before accepting a merge. New groups require a new recovery code and reconnection of other devices.
+
+Existing bundled MIT and font license notices are retained under Dayflow.Desktop/licenses. original/ and the isolated Node loader/helper/controller snapshots support source provenance and contract tests; the production path is runtime/assets plus original-sync-service.js.

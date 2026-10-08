@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1277 2000" preserveAspectRatio="none">
+  <g id="date-marker" fill="#fff" opacity=".17">
+    <path d="M205 126c72-7 199-4 389-1 20 1 34 8 31 15-5 9-21 12-45 11-176-3-292-1-362 3-24 1-36-5-37-14-1-7 7-12 24-14Z"/>
+  </g>
+  <g id="date-flower" transform="translate(-28 0)" fill="#fff" opacity=".88">
+    <circle cx="151" cy="66" r="5"/><circle cx="142" cy="60" r="5"/><circle cx="160" cy="60" r="5"/>
+    <circle cx="143" cy="71" r="5"/><circle cx="159" cy="71" r="5"/><circle cx="151" cy="65" r="2.3" fill-opacity=".48"/>
+  </g>
+  <g id="date-heart-sparkles" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M665 109c-6-10-19-4-16 4 2 6 10 12 16 17 7-6 14-12 16-18 2-8-10-14-16-3Z" stroke-width="4" opacity=".86"/>
+    <path d="M187 93l-8-13m-8 32-13-4m509-21 5-14m8 18 13-6m-4 20 13 3" stroke-width="4" opacity=".64"/>
+  </g>
+  <g id="dday-petal-pill" fill="#fff" opacity=".13"><rect x="878" y="114" width="304" height="63" rx="31"/></g>
+  <g id="dday-heart-sparkles" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M920 53c-4-7-13-3-11 3 1 4 7 8 11 11 5-4 10-8 11-12 1-6-7-10-11-2Z" stroke-width="3.5"/>
+    <path d="M1199 105v-12m-8 18-9-5m30 7 9-6m-24 21-8 6" stroke-width="3.5" opacity=".68"/>
+  </g>
+  <g id="comment-bubble" transform="translate(40 0)" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".84">
+    <path d="M164 202c-12 0-21 8-21 18 0 7 4 12 11 16l-2 9 11-7c13 1 23-7 23-18 0-10-9-18-22-18Z"/>
+    <circle cx="157" cy="220" r="1.4" fill="#fff"/><circle cx="164" cy="220" r="1.4" fill="#fff"/><circle cx="171" cy="220" r="1.4" fill="#fff"/>
+  </g>
+  <g id="comment-panel" fill="none" stroke="#fff" stroke-width="2.8" stroke-dasharray="2 8" stroke-linecap="round" opacity=".54">
+    <rect x="108" y="232" width="672" height="112" rx="25"/>
+  </g>
+  <g id="comment-bow" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7">
+    <path d="M758 329c-12-1-25-13-20-22 4-8 16-4 26 8 9-13 21-17 26-9 5 9-8 22-20 23m-7-1-10 22m14-22 11 22m-15-20 4-7 5 7-5 7Z"/>
+  </g>
+  <g id="total-time-clock-heart" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".8">
+    <circle cx="967" cy="216" r="11"/><path d="M967 209v8l5 3m-81 104q132 11 285 0m-4-203c-4-7-13-3-11 3 1 4 7 8 11 11 5-4 10-8 11-12 1-6-7-10-11-2Z"/>
+    <path d="M883 258v-12m-9 23-9-5m316 1 9-7m-9 20 10 3"/>
+  </g>
+  <g id="tasks-brush" fill="#fff" opacity=".2"><path d="M52 434c13-5 39-6 61-3 10 1 14 7 11 14-3 8-8 12-17 13-23 2-45 3-59-1-11-3-10-18 3-23Z"/></g>
+  <g id="tasks-check" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+    <rect x="28" y="411" width="24" height="24" rx="5"/><path d="m33 423 6 6 11-13"/>
+  </g>
+  <g id="tasks-sprout" transform="translate(-160 0)" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" opacity=".77">
+    <path d="M304 448c1-9-1-19-6-27m5 18c9-1 15-7 17-16-9 0-15 4-17 16m-1-4c-8-1-13-6-14-13 8-1 13 4 14 13Z"/>
+  </g>
+  <g id="timetable-heading-clock" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" opacity=".82">
+    <circle cx="797" cy="425" r="11"/><path d="M797 418v7l5 3"/>
+  </g>
+  <g id="timetable-dots" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="1 7" stroke-linecap="round" opacity=".56">
+    <path d="M920 445V1890M1004 445V1890M1088 445V1890M1172 445V1890"/>
+    <path d="M875 484H1218M875 528H1218M875 572H1218M875 616H1218M875 660H1218M875 704H1218M875 748H1218M875 792H1218M875 836H1218M875 880H1218M875 924H1218M875 968H1218M875 1012H1218M875 1056H1218M875 1100H1218M875 1144H1218M875 1188H1218M875 1232H1218M875 1276H1218M875 1320H1218M875 1364H1218M875 1408H1218M875 1452H1218M875 1496H1218M875 1540H1218M875 1584H1218M875 1628H1218M875 1672H1218M875 1716H1218M875 1760H1218M875 1804H1218M875 1848H1218"/>
+  </g>
+  <g id="memo-brush" fill="#fff" opacity=".2"><path d="M52 1652c13-5 39-6 61-3 10 1 14 7 11 14-3 8-8 12-17 13-23 2-45 3-59-1-11-3-10-18 3-23Z"/></g>
+  <g id="memo-lavender-panel" fill="#fff" opacity=".13"><rect x="53" y="1658" width="741" height="222" rx="34"/></g>
+  <g id="memo-pencil" transform="translate(-16 0)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".86">
+    <path d="m31 1645 18-24 9 7-18 24-12 4 3-11Zm18-24 5-6 9 7-5 6"/>
+  </g>
+  <g id="memo-dots" fill="none" stroke="#fff" stroke-width="1.4" stroke-dasharray="1 8" stroke-linecap="round" opacity=".62">
+    <path d="M118 1694H735M118 1744H735M118 1794H735M118 1844H735"/>
+  </g>
+  <g id="memo-heart-leaf" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".78">
+    <path d="M78 1871c-6-9-17-3-14 5 2 5 9 10 14 14 6-5 12-10 14-15 2-7-8-11-14-4Z"/>
+    <path d="M744 1881c-11-22-9-43 2-66m-2 48c13-8 21-20 24-35m-24 48c-15-5-24-15-29-28m31 7c-3-16 0-28 9-40"/>
+  </g>
+</svg>
