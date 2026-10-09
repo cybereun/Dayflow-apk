@@ -13,7 +13,17 @@
   await new Promise(resolve=>setTimeout(resolve,150));
   process.argv[2]='palette';
  }
- const expression=process.argv[2]==='tablet'
+ const expression=process.argv[2]==='ink-popup-stability'
+   ? "(async()=>{const button=document.querySelector('[data-ink-tools] button');if(!button)return {missing:true};const panel=document.querySelector('[data-ink-settings]');if(!panel)return {isolated:false};if(panel.hidden)button.click();const positions=[];for(let i=0;i<20;i++){await new Promise(r=>setTimeout(r,60));const rect=panel.getBoundingClientRect();positions.push({x:rect.x,y:rect.y,w:rect.width,h:rect.height});}return {isolated:panel.parentElement===document.body,stable:positions.every(p=>JSON.stringify(p)===JSON.stringify(positions[0])),samples:positions.length,rect:positions[0],ownRecognizer:typeof AndroidDayflow.recognizeInk}})()"
+   : process.argv[2]==='recognizer-status'
+   ? "new Promise(resolve=>{const old=window.__dayflowInkResult;const id='diagnostic-model-status';const timer=setTimeout(()=>{window.__dayflowInkResult=old;resolve({timeout:true})},10000);window.__dayflowInkResult=(key,result)=>{if(key!==id)return old?.(key,result);clearTimeout(timer);window.__dayflowInkResult=old;resolve(result)};AndroidDayflow.recognizeInk(id,'status','[]')})"
+   : process.argv[2]==='ink-check'
+   ? "(async()=>{const backup=await window.dayflow.storage.snapshotNow();const pages=Array.from(document.querySelectorAll('[data-page-kind]'));return {backupCreated:!!backup,pages:pages.map(e=>({kind:e.dataset.pageKind,ink:!!e.querySelector('[data-dayflow-ink]')})),tools:!!document.querySelector('[data-ink-tools]'),toolsInsidePalette:!!document.querySelector('#android-palette [data-ink-tools]'),recognizer:typeof AndroidDayflow.recognizeInk,viewport:[innerWidth,innerHeight]}})()"
+   : process.argv[2]==='tablet-check'
+   ? "({pages:Array.from(document.querySelectorAll('[data-tablet-day]')).map(e=>({date:e.dataset.tabletDay,rect:(()=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}})()})),pens:document.querySelectorAll('#android-palette .pal-pen').length,blockingDialogs:document.querySelectorAll('[role=dialog],[role=alertdialog]').length,edge:document.documentElement.dataset.androidPaletteEdge,frames:document.querySelectorAll('iframe').length})"
+   : process.argv[2]==='tablet-diagnose'
+   ? "(async()=>{const lib=await window.dayflow.storage.readLibrary();document.querySelector('#android-palette .pal-book')?.click();await new Promise(r=>setTimeout(r,200));return {viewport:[innerWidth,innerHeight],libraryStatus:lib.status,bookCount:lib.status==='ok'?JSON.parse(lib.text).books?.length:null,dialog:!!document.querySelector('[role=dialog]'),buttons:Array.from(document.querySelectorAll('[role=dialog] button')).map(e=>e.textContent),frames:document.querySelectorAll('iframe').length}})()"
+   : process.argv[2]==='tablet'
    ? "(async()=>{window.dayflow.window.setKind('daily');await new Promise(r=>setTimeout(r,250));return {pages:Array.from(document.querySelectorAll('[data-tablet-day]')).map(e=>({date:e.dataset.tabletDay,width:e.getBoundingClientRect().width})),paletteEdge:document.documentElement.dataset.androidPaletteEdge,spread:!!document.querySelector('.android-tablet-spread')}})()"
    : process.argv[2]==='book-menu'
    ? "(async()=>{document.querySelector('#android-palette .pal-book')?.click();await new Promise(r=>setTimeout(r,150));const dialog=document.querySelector('[role=dialog][aria-label=\"플래너 선택\"]');return {visible:!!dialog,choices:dialog?.querySelectorAll('button').length}})()"

@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict');
+(async()=>{const tabs=await fetch('http://127.0.0.1:9229/json').then(r=>r.json()),tab=tabs.find(t=>t.url.includes('view=main'));const ws=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j});const result=await new Promise((resolve,reject)=>{ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id!==1)return;if(m.result.exceptionDetails)reject(Error(m.result.exceptionDetails.exception?.description??m.result.exceptionDetails.text));else resolve(m.result.result.value);};ws.send(JSON.stringify({id:1,method:'Runtime.evaluate',params:{awaitPromise:true,returnByValue:true,expression:`(async()=>{
+ const {mountInkOverlay}=await import('./assets/handwriting-overlay.js'),{createInkStore}=await import('./assets/handwriting-storage.js');
+ let doc=null;const storage=createInkStore({read:async()=>structuredClone(doc),write:async d=>{doc=structuredClone(d)}});
+ const sample={v:1,id:'test-stroke',bookId:'test-book',kind:'daily',date:'2026-10-09',points:[{x:0,y:50,p:.5,t:0},{x:100,y:50,p:.5,t:100}],width:2,color:'#34333a',deleted:false,stamp:{time:1,device:'test'}};await storage.applyStrokes([sample],true);
+ const page=document.createElement('div');page.style.cssText='position:absolute;left:0;top:0;width:1277px;height:2000px;opacity:0;pointer-events:none';document.body.append(page);
+ const opts={enabled:true,mode:'partial',finger:false,color:'#34333a',width:3,eraseRadius:10};let selected=0;
+ const overlay=mountInkOverlay({page,bookId:'test-book',kind:'daily',date:'2026-10-09',editable:true,storage,deviceId:'test',options:()=>opts,onSelection:n=>selected=n,onError:e=>{throw e}});
+ try{await new Promise(r=>setTimeout(r,100));if(typeof overlay.deleteSelected!=='function')return {missingSelection:true};const svg=page.querySelector('svg');svg.setPointerCapture=()=>{};
+ const send=(type,x,y)=>{const rect=svg.getBoundingClientRect();svg.dispatchEvent(new PointerEvent(type,{pointerId:71,pointerType:'pen',clientX:rect.left+x,clientY:rect.top+y,pressure:.5,bubbles:true,cancelable:true}));};
+ send('pointerdown',50,50);send('pointerup',50,50);await new Promise(r=>setTimeout(r,100));const live=()=>doc.records.filter(s=>!s.deleted).length;const partial=live();await overlay.undo();const restored=live();
+ opts.mode='lasso';send('pointerdown',40,40);send('pointermove',60,40);send('pointermove',60,60);send('pointermove',40,60);send('pointerup',40,40);await new Promise(r=>setTimeout(r,100));await overlay.deleteSelected();const deleted=live();await overlay.undo();await overlay.clear();const cleared=live();await overlay.undo();
+ return {partial,restored,selected,deleted,cleared,afterUndo:live(),modeControl:!!document.querySelector('[data-ink-settings] select[aria-label="필기 도구"]')};
+ }finally{overlay.dispose();page.remove();}
+ })()`}}));});ws.close();assert.deepEqual(result,{partial:2,restored:1,selected:1,deleted:0,cleared:0,afterUndo:1,modeControl:true});console.log('Device ink eraser/selection/undo: PASS');})().catch(e=>{console.error(e);process.exitCode=1});

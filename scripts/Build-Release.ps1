@@ -1,4 +1,5 @@
 param(
+    [ValidateSet('release','debug')][string]$BuildType = 'release',
     [string]$Toolchain = 'N:\codex-L\instant-camera\.toolchain',
     [string]$StageDirectory = 'C:\Users\cybereun\AppData\Local\Temp\dayflow-apk-native-build-release'
 )
@@ -32,13 +33,17 @@ $env:ANDROID_HOME = Join-Path $Toolchain 'sdk'
 $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
 Push-Location $StageDirectory
 try {
-    & $gradle ':app:assembleRelease' --console=plain
+    $dayflowTask=if($BuildType -eq 'debug'){':app:assembleDebug'}else{':app:assembleRelease'}
+    & $gradle $dayflowTask --console=plain
     if ($LASTEXITCODE -ne 0) { throw "Gradle release build failed ($LASTEXITCODE)." }
-    $apk = Join-Path $StageDirectory 'app\build\outputs\apk\release\app-release.apk'
+    $apk = Join-Path $StageDirectory "app\build\outputs\apk\$BuildType\app-$BuildType.apk"
     if (!(Test-Path -LiteralPath $apk)) { throw 'The signed release APK was not created.' }
     & (Join-Path $env:ANDROID_HOME 'build-tools\35.0.0\apksigner.bat') verify --verbose --print-certs $apk
     if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed.' }
     $output = Join-Path $source 'artifacts'
     New-Item -ItemType Directory -Path $output -Force | Out-Null
-    Copy-Item -LiteralPath $apk -Destination (Join-Path $output 'Dayflow-1.0.15.apk') -Force
+    $dayflowVersion=[regex]::Match((Get-Content -LiteralPath (Join-Path $source 'app\build.gradle.kts') -Raw),'versionName\s*=\s*"([0-9.]+)"').Groups[1].Value
+    if(!$dayflowVersion){throw 'Version name missing'}
+    $dayflowSuffix=if($BuildType -eq 'debug'){'-debug'}else{''}
+    Copy-Item -LiteralPath $apk -Destination (Join-Path $output "Dayflow-$dayflowVersion$dayflowSuffix.apk") -Force
 } finally { Pop-Location }

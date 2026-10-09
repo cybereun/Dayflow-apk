@@ -10,6 +10,9 @@ import android.webkit.WebView
 import com.cybereun.dayflow.data.PlannerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.lifecycle.lifecycleScope
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
@@ -23,6 +26,14 @@ class AndroidDayflowBridge(
     private val shared = activity.getSharedPreferences("dayflow_shared", Context.MODE_PRIVATE)
     private val tutorials = activity.getSharedPreferences("dayflow_tutorials", Context.MODE_PRIVATE)
     private val originalSync = OriginalSyncCredentials(activity)
+    private val inkSync = InkSyncBridge(originalSync)
+    @JavascriptInterface fun inkRequest(requestId: String, action: String, argument: String) {
+        activity.lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) { runCatching { inkSync.call(action, JSONObject(argument)) }
+                .getOrElse { JSONObject().put("__error", it.message ?: "필기 동기화에 실패했습니다. 원본은 유지합니다.") } }
+            webView.evaluateJavascript("window.__dayflowInkResolve?.(${JSONObject.quote(requestId)},$result)",null)
+        }
+    }
     @JavascriptInterface fun originalCredentials(): String = encoded { originalSync.read() }
     @JavascriptInterface fun originalSetCredentials(text: String): String = encoded { originalSync.write(text); JSONObject().put("ok", true) }
     @JavascriptInterface fun originalSettings(): String = encoded { originalSync.settings() }
@@ -31,6 +42,7 @@ class AndroidDayflowBridge(
     @JavascriptInterface fun originalSnapshot(): String = encoded { repository.rendererBackupNow() ?: error("백업을 만들지 못했습니다.") }
 
     @JavascriptInterface fun version(): String = BuildConfig.VERSION_NAME
+    @JavascriptInterface fun checkForUpdates() { activity.checkForUpdates() }
     @JavascriptInterface fun remoteApplyVersion(): Int = repository.remoteApplyVersion.value
 
     @JavascriptInterface fun readLibrary(): String = encoded {

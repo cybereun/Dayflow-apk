@@ -6,8 +6,8 @@ android {
         applicationId = "com.cybereun.dayflow"
         minSdk = 26
         targetSdk = 35
-        versionCode = 15
-        versionName = "1.0.15"
+        versionCode = 16
+        versionName = "1.0.16"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true; buildConfig = true }
@@ -28,7 +28,7 @@ android {
             }
         }
     }
-    buildTypes { release {
+    buildTypes { debug { if(releaseReady) signingConfig=signingConfigs.getByName("dayflowRelease") }; release {
         isMinifyEnabled = false
         if(releaseReady) signingConfig=signingConfigs.getByName("dayflowRelease")
         else if(gradle.startParameter.taskNames.any{it.contains("release",ignoreCase=true)}) throw GradleException("A signed release requires the Dayflow release-key environment variables. Use scripts/Build-Release.ps1.")

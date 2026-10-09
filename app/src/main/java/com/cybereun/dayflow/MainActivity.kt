@@ -53,6 +53,8 @@ class PlannerViewModel(application:Application):AndroidViewModel(application) {
     override fun onCleared(){database.close();super.onCleared()}
 }
 class MainActivity:ComponentActivity() {
+    private lateinit var updater: AppUpdater
+    fun checkForUpdates() { runOnUiThread { if (::updater.isInitialized) updater.check(true) } }
     private lateinit var plannerView:WebView
     private lateinit var saveTextLauncher:ActivityResultLauncher<String>
     private lateinit var openTextLauncher:ActivityResultLauncher<Array<String>>
@@ -63,6 +65,7 @@ class MainActivity:ComponentActivity() {
 
     override fun onCreate(savedInstanceState:Bundle?) {
         super.onCreate(savedInstanceState)
+        updater = AppUpdater(this)
         saveTextLauncher=registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->finishTextRequest(uri,true)}
         openTextLauncher=registerForActivityResult(ActivityResultContracts.OpenDocument()){uri->finishTextRequest(uri,false)}
         androidx.core.view.WindowCompat.getInsetsController(window,window.decorView).apply {
@@ -75,6 +78,10 @@ class MainActivity:ComponentActivity() {
             setBackgroundColor(android.graphics.Color.rgb(252,251,247))
             settings.javaScriptEnabled=true
             settings.domStorageEnabled=true
+            settings.setSupportZoom(true)
+            settings.builtInZoomControls=true
+            settings.displayZoomControls=false
+            settings.useWideViewPort=true
             settings.allowFileAccess=false
             settings.allowContentAccess=false
             settings.allowFileAccessFromFileURLs=false
@@ -100,6 +107,7 @@ class MainActivity:ComponentActivity() {
         setContentView(container)
         androidx.core.view.ViewCompat.requestApplyInsets(container)
         plannerView.loadUrl("https://appassets.androidplatform.net/assets/desktop/index.html?view=main")
+        plannerView.postDelayed({ if (!isFinishing && !isDestroyed) updater.check() }, 4000)
         onBackPressedDispatcher.addCallback(this,object:OnBackPressedCallback(true){
             override fun handleOnBackPressed(){plannerView.evaluateJavascript("window.__dayflowAndroidBack?.()",null)}
         })
@@ -135,7 +143,7 @@ class MainActivity:ComponentActivity() {
         plannerView.evaluateJavascript("window.__dayflowAndroidResolve?.(${JSONObject.quote(requestId)},$response)",null)
     }
 
-    override fun onResume(){super.onResume();if(::plannerView.isInitialized)plannerView.onResume()}
+    override fun onResume(){super.onResume();if(::plannerView.isInitialized)plannerView.onResume();if(::updater.isInitialized)updater.onResume()}
     override fun onPause(){if(::plannerView.isInitialized)plannerView.onPause();super.onPause()}
     override fun onDestroy(){if(::plannerView.isInitialized){plannerView.removeJavascriptInterface("AndroidDayflow");plannerView.destroy()};super.onDestroy()}
 }

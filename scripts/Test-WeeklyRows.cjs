@@ -1,0 +1,11 @@
+const fs=require('node:fs');
+const assert=require('node:assert/strict');
+const source=fs.readFileSync('app/src/main/assets/desktop/assets/index-BIdIJjAt.js','utf8');
+const functionText=source.slice(source.indexOf('function dl(e) {'),source.indexOf('var fl =',source.indexOf('function dl(e) {')));
+const dl=Function('window',functionText+';return dl;')({AndroidDayflow:true});
+const tasks=[{id:'a',row:0,text:'first'},{id:'b',row:7,text:'lower'},{id:'c',row:12,text:'overflow'}];
+assert.equal(dl(tasks).tasks[7].id,'b');
+assert.equal(dl(tasks).tasks[1],null);
+assert.equal(dl(tasks).more,1);
+assert.match(source,/Gd\(\)\.addTask\(t,e\)/);
+console.log('PASS: weekly task rows preserve gaps and use the touched row');

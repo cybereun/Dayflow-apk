@@ -1,5 +1,9 @@
 /* Adapt containers only; original planner and palette controls remain unchanged. */
-@media (max-width: 600px) {
+[data-ink-settings][hidden] {display:none!important;}
+.dayflow-planner-stage,.android-tablet-spread,.android-statistics {top:var(--android-content-top,48px)!important;}
+[data-ink-toolbar-slot] {display:flex;flex-shrink:0;}
+@media (max-width:599px) {#android-toolbar button:disabled {display:none!important;} #android-toolbar .android-toolbar-inner {gap:3px!important;} [data-ink-tools] button {padding:4px 6px!important;font-size:13px!important;}}
+@media (max-width: 900px) {
   body[data-android-view="settings"] #root > div {
     flex-direction: column !important;
   }
@@ -37,6 +41,25 @@
   }
 }
 #android-palette { position:fixed; z-index:800; }
+html[data-android-palette-edge="right"] #android-palette {width:96px!important;}
+html[data-android-palette-edge="right"] #android-palette>.pal {padding:6px 9px!important;box-sizing:border-box;}
+html[data-android-palette-edge="right"] #android-palette .pal-card {max-width:78px!important;flex-shrink:0;}
+html[data-android-palette-edge="right"] .dayflow-planner-stage,
+html[data-android-palette-edge="right"] .android-tablet-spread,
+html[data-android-palette-edge="right"] .android-statistics {right:96px!important;}
+[data-daily-field]:focus {caret-color:#202024 !important;outline:none !important;background:transparent !important;box-shadow:none !important;}
+.dayflow-planner-stage input:focus,.dayflow-planner-stage textarea:focus {caret-color:#202024!important;}
+.android-tablet-spread {scrollbar-width:auto;overscroll-behavior:contain;}
+body[data-android-view="settings"] input,body[data-android-view="settings"] textarea,body[data-android-view="settings"] select {max-width:100%;box-sizing:border-box;}
+body[data-android-view="settings"] #root {max-width:100vw;overflow-x:hidden;}
+[data-keep-focus].no-drag {max-width:calc(100vw - 24px)!important;box-sizing:border-box;overflow-y:auto;}
+html[data-android-palette-edge="bottom"] #android-palette>.pal {height:auto!important;overflow-x:auto!important;overflow-y:hidden!important;}
+html[data-android-palette-edge="right"] #android-palette>.pal {height:100%!important;overflow-x:hidden!important;overflow-y:auto!important;}
+.android-tablet-spread::-webkit-scrollbar,.dayflow-planner-stage::-webkit-scrollbar {width:8px;height:8px;}
+.android-tablet-spread::-webkit-scrollbar-thumb,.dayflow-planner-stage::-webkit-scrollbar-thumb {background:#9e9991;border-radius:6px;}
+.android-tablet-page-turn { animation:android-page-turn 280ms ease-out; transform-origin:center; }
+@keyframes android-page-turn {from {opacity:.6;transform:perspective(1200px) rotateY(-8deg);}to {opacity:1;transform:perspective(1200px) rotateY(0);}}
+@media (prefers-reduced-motion:reduce) {.android-tablet-page-turn {animation:none;}}
 @media (orientation: portrait) and (max-width:599px) {
   #android-palette .pal-pen {width:34px !important;min-width:34px !important;padding-left:0 !important;padding-right:0 !important;margin-left:0 !important;margin-right:0 !important;overflow:visible !important;}
   #android-palette .android-pen-label {display:none !important;}

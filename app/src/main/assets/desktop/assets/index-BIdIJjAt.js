@@ -1,5 +1,6 @@
 import { mountDeveloperInfo, feedbackUrl, privacyText } from './developer-info.js';
 import { mountSync } from './dayflow-sync.js';
+import {mountHandwriting} from './handwriting-service.js';
 import { startOriginalSync, saveOriginalSyncBeforeUpdate, originalHistoryItems, mountOriginalTypingHint } from './original-sync-service.js';
 var e = Object.create,
   t = Object.defineProperty,
@@ -13493,7 +13494,7 @@ function js({ opacity: e, style: t }) {
     },
   });
 }
-var Ms = (0, g.memo)(function ({ kind: e, printing: t = !1 }) {
+var Ms = (0, g.memo)(function ({ kind: e, printing: t = !1, hideHoles = false }) {
   let n = Kn[e];
   if (t)
     return (0, H.jsx)(`div`, {
@@ -13528,7 +13529,7 @@ var Ms = (0, g.memo)(function ({ kind: e, printing: t = !1 }) {
         height: n.height,
         style: { position: `absolute`, left: 0, top: 0 },
         "aria-hidden": !0,
-        children: Jn.holes(e).map((e, t) =>
+        children: (hideHoles ? [] : Jn.holes(e)).map((e, t) =>
           (0, H.jsxs)(
             `g`,
             {
@@ -13561,13 +13562,19 @@ var Ms = (0, g.memo)(function ({ kind: e, printing: t = !1 }) {
   });
 });
 function Ns() {
+  const lastSize = g.useRef({w:window.innerWidth,h:window.innerHeight});
   let [e, t] = (0, g.useState)(() => ({
     w: window.innerWidth,
     h: window.innerHeight,
   }));
   return (
     (0, g.useLayoutEffect)(() => {
-      let e = () => t({ w: window.innerWidth, h: window.innerHeight });
+      let e = () => {
+        const previous=lastSize.current;
+        const typing=!!window.AndroidDayflow && document.activeElement?.matches('input,textarea,[contenteditable="true"]');
+        const next={w:window.innerWidth,h:typing && previous.w===window.innerWidth && window.innerHeight<previous.h ? previous.h : window.innerHeight};
+        lastSize.current=next;t(next);
+      };
       return (
         window.addEventListener(`resize`, e),
         e(),
@@ -13583,29 +13590,33 @@ function Ps({ kind: e, children: t, paper: n = !0, scale: r, style: i }) {
     d = Ss((e) => e.appearanceTheme ?? `classic`),
     f = Gn(J((e) => e.defaultTheme)),
     mobilePortrait = !!window.AndroidDayflow && a.w < a.h && a.w < 600,
-    s = r ?? (mobilePortrait ? a.w / (e === 'daily' ? 820 : 620) : Math.min(a.w / o.width, a.h / o.height)),
-    c = Math.max(0, (a.w - o.width * s) / 2),
-    l = mobilePortrait ? 0 : Math.max(0, (a.h - o.height * s) / 2);
+    usableWidth=a.w-(window.AndroidDayflow && !mobilePortrait ? 96 : 0),
+    usableHeight=a.h-(window.AndroidDayflow ? 48 : 0),
+    weeklyPortrait=!!window.AndroidDayflow && e==='weekly' && a.w<a.h,
+    readable=mobilePortrait || weeklyPortrait,
+    s = r ?? (weeklyPortrait ? (usableHeight-(mobilePortrait?90:0))/o.height : mobilePortrait ? a.w / (e === 'daily' ? 820 : 620) : Math.min(usableWidth / o.width, usableHeight / o.height)),
+    c = Math.max(0, (usableWidth - o.width * s) / 2),
+    l = mobilePortrait ? 0 : Math.max(0, (usableHeight - o.height * s) / 2);
   return (0, H.jsx)(Ts.Provider, {
     value: s,
     children: (0, H.jsx)(`div`, {
       className: `dayflow-planner-stage`,
       "data-dayflow-theme": d === `soft-sticker` ? `soft-sticker` : `classic`,
-      style: { position: `fixed`, inset: 0, top:window.AndroidDayflow?48:0, bottom:mobilePortrait?90:0, overflow: mobilePortrait?'auto':`hidden`, ...i },
-      'data-android-readable':mobilePortrait?'true':undefined,
+      style: { position: `fixed`, inset: 0, top:window.AndroidDayflow?48:0, right:window.AndroidDayflow&&!mobilePortrait?76:0, bottom:mobilePortrait?90:0, overflow: window.AndroidDayflow?'auto':`hidden`, ...i },
+      'data-android-readable':readable?'true':undefined,
       children: (0, H.jsxs)(`div`, {
         "data-page-kind": e,
         "data-dayflow-theme": d === `soft-sticker` ? `soft-sticker` : `classic`,
         "data-dayflow-accent": f.accent,
         "data-dayflow-color": f.id,
         style: {
-          position: mobilePortrait ? 'relative' : `absolute`,
+          position: readable ? 'relative' : `absolute`,
           left: c,
           top: l,
-          width: o.width + (mobilePortrait && e === 'weekly' ? 360 : 0),
+          width: o.width + (readable && e === 'weekly' ? Math.max(0,usableWidth/s-260) : 0),
           height: o.height,
-          zoom: mobilePortrait?s:undefined,
-          transform: mobilePortrait?undefined:`scale(${s})`,
+          zoom: readable?s:undefined,
+          transform: readable?undefined:`scale(${s})`,
           transformOrigin: `0 0`,
           "--dayflow-accent": f.accent,
           "--dayflow-tint": f.tint,
@@ -13902,7 +13913,7 @@ function nc(e, t) {
       r = (e) => {
         e.key === `Escape` && !e.isComposing && (e.stopPropagation(), t());
       },
-      i = () => t(),
+      i = () => { if (!window.AndroidDayflow) t(); },
       a = setTimeout(() => {
         (window.addEventListener(`pointerdown`, n, !0),
           window.addEventListener(`blur`, i),
@@ -14083,7 +14094,8 @@ function sc({ anchor: e, width: t, onClose: n, children: r }) {
       };
       r();
       let a = new ResizeObserver(r);
-      return (a.observe(n), () => a.disconnect());
+      window.addEventListener('resize',r);
+      return (a.observe(n), () => {a.disconnect();window.removeEventListener('resize',r);});
     }, [e, t]),
     (0, tc.createPortal)(
       (0, H.jsx)(`div`, {
@@ -14835,6 +14847,7 @@ function Cc(e) {
   U.getState().key !== e && U.setState({ key: e });
 }
 startOriginalSync({store:z,bridge:V(),editing:U});
+mountHandwriting({store:z,bridge:V(),navigation:()=>ss.getState()});
 function wc() {
   (U.getState().key !== null && U.setState({ key: null }), Tc());
 }
@@ -15690,8 +15703,8 @@ var ul = P.categoryX + 16;
 P.leftEnd - 12 - ul;
 function dl(e) {
   return {
-    tasks: Array.from({ length: 10 }, (t, n) => e[n] ?? null),
-    more: Math.max(0, e.length - 10),
+    tasks: Array.from({ length: 10 }, (t, n) => window.AndroidDayflow ? e.find(task=>(task.row??e.indexOf(task))===n)??null : e[n]??null),
+    more: window.AndroidDayflow ? e.filter((task,index)=>(task.row??index)>=10).length : Math.max(0, e.length - 10),
   };
 }
 var fl = (e, t) => si(e, 28, t - 6);
@@ -18201,13 +18214,14 @@ function androidAlignToday() {
   column?.scrollIntoView({inline:'start',block:'nearest',behavior:'instant'});
 }
 function qd({ week: e }) {
+  const androidWeeklyViewport=Ns();
   g.useEffect(()=>{
     if (!window.AndroidDayflow) return;
     const timer=setTimeout(androidAlignToday,80);
     const align=()=>setTimeout(androidAlignToday,80);
     window.addEventListener('dayflow-align-today',align);
     return ()=>{clearTimeout(timer);window.removeEventListener('dayflow-align-today',align);};
-  },[e]);
+  },[e,androidWeeklyViewport.w,androidWeeklyViewport.h]);
   let t = (0, g.useMemo)(() => A(D(e) ?? new Date()), [e]),
     n = E(t),
     r = Wd(),
@@ -18678,7 +18692,7 @@ function tf({
         (0, H.jsx)(
           `div`,
           {
-            onMouseDown: (e) => Ec(e, () => Cc(Ac(t, Vd(t)))),
+            onMouseDown: (event) => Ec(event, () => Cc(Ac(t, window.AndroidDayflow ? Gd().addTask(t,e) : Vd(t)))),
             style: {
               ...Kd({
                 x: F.textX,
@@ -20551,7 +20565,16 @@ function mp({ now: e } = {}) {
             (0, H.jsx)(hp, {
               r: q.goalBox,
               help: `이번 주 주간 페이지 열기`,
-              onClick: () => Bd(a),
+              onClick: () => {
+                Bd(a);
+                if (window.AndroidDayflow) setTimeout(() => {
+                  const key = hl(E(a));
+                  const field = Array.from(document.querySelectorAll('[data-dayflow-field]'))
+                    .find(node => node.getAttribute('data-dayflow-field') === key);
+                  field?.scrollIntoView({block:'nearest',inline:'start',behavior:'instant'});
+                  Cc(key);
+                }, 180);
+              },
               children: (e) =>
                 (0, H.jsx)(`div`, {
                   style: {
@@ -25313,7 +25336,7 @@ function Mg() {
     n = B((e) => !e.library.books.some((e) => !e.isSample)),
     r = Qm((e) => e.onboarding),
     i = V(),
-    a = !!i.tutorial && !i.snap.active,
+    a = !!i.tutorial && !i.snap.active && !window.AndroidDayflow,
     o = (0, g.useRef)(!1),
     s = e === `ready` && !t;
   return (
@@ -25754,6 +25777,14 @@ function Bg({ day: e, anchorY: t }) {
   let n = (0, g.useRef)(null),
     r = Rg(t, 560),
     i = () => Zm.getState().close();
+  const androidViewport = Ns();
+  if (window.AndroidDayflow) r = {
+    top: 8,
+    left: Math.max(8, (androidViewport.w - Math.min(340, androidViewport.w - 16)) / 2),
+    right: 'auto',
+    maxHeight: Math.max(100, window.innerHeight - 16),
+    zIndex: 10020,
+  };
   return (
     (0, g.useEffect)(() => {
       let e = (e) => {
@@ -25764,7 +25795,7 @@ function Bg({ day: e, anchorY: t }) {
         () => window.removeEventListener(`mousedown`, e, !0)
       );
     }, []),
-    (0, H.jsx)(`div`, {
+    (0, tc.createPortal)((0, H.jsx)(`div`, {
       ref: n,
       className: `no-drag`,
       role: `dialog`,
@@ -25773,7 +25804,7 @@ function Bg({ day: e, anchorY: t }) {
       style: { ...Lg, ...r },
       onKeyDown: (e) => e.key === `Escape` && i(),
       children: (0, H.jsx)(_c, { day: e, onClose: i }),
-    })
+    }), document.body)
   );
 }
 var Vg = [
@@ -27124,6 +27155,7 @@ function vv() {
   e && $m(e) && e.blur();
 }
 async function yv(e, t = !1, n = 0) {
+  if (t && window.AndroidDayflow) return;
   if (cv()) return;
   let r = z.getState();
   if (
@@ -28793,7 +28825,10 @@ function Wy() {
 }
 function AndroidHomeStatistics() {
   const viewport = Ns();
-  const width = viewport.w - 24;
+  const tablet=Math.min(screen.width,screen.height)>=600;
+  const side=tablet || viewport.w>viewport.h;
+  const width = viewport.w - 24 - (side?96:0);
+  const columns=tablet && viewport.w>viewport.h ? 2 : 1;
   // Reuse original charts and click handlers; crop each original region into
   // one vertical row rather than shrinking the complete two-column sheet.
   const panels = [
@@ -28806,19 +28841,24 @@ function AndroidHomeStatistics() {
     {name:'WEEKDAYS',rect:{x:q.weekdayRect.x,y:986,width:540,height:251}},
     {name:'TASK MARKS',rect:{x:q.marksRect.x,y:986,width:572,height:251}},
   ];
-  return H.jsx('div',{className:'android-statistics',style:{position:'fixed',inset:0,top:48,bottom:90,overflowY:'auto',padding:12,background:'#fcfbf7'},children:panels.map(({name,rect},index)=>{
-    const scale=width/rect.width;
-    return H.jsx('section',{'aria-label':name,style:{position:'relative',width,height:rect.height*scale,overflow:'hidden',marginBottom:12,borderRadius:12,background:'#fffdf8'},children:H.jsx(Ts.Provider,{value:scale,children:H.jsx('div',{style:{position:'absolute',width:Kn.home.width,height:Kn.home.height,left:-rect.x*scale,top:-rect.y*scale,transform:`scale(${scale})`,transformOrigin:'0 0'},children:H.jsx(mp,{})})})},index);
-  })});
+  const renderPanel=({name,rect},cardWidth,index)=>{
+    const scale=cardWidth/rect.width;
+    return H.jsx('section',{'aria-label':name,style:{position:'relative',width:cardWidth,height:rect.height*scale,overflow:'hidden',marginBottom:12,borderRadius:12,background:'#fffdf8'},children:H.jsx(Ts.Provider,{value:scale,children:H.jsx('div',{style:{position:'absolute',width:Kn.home.width,height:Kn.home.height,left:-rect.x*scale,top:-rect.y*scale,transform:`scale(${scale})`,transformOrigin:'0 0'},children:H.jsx(mp,{})})})},index);
+  };
+  return H.jsx('div',{className:'android-statistics',style:{position:'fixed',inset:0,top:48,right:side?76:0,bottom:side?0:90,overflowY:'auto',padding:12,boxSizing:'border-box',background:'#fcfbf7'},children:columns===1?panels.map((panel,index)=>renderPanel(panel,width,index)):H.jsx('div',{style:{display:'flex',gap:12,alignItems:'flex-start'},children:[0,1].map(column=>{const cardWidth=(width-12)*(column===0?1160:696)/1856;return H.jsx('div',{style:{width:cardWidth,minWidth:0},children:panels.filter((_,index)=>index%2===column).map((panel,index)=>renderPanel(panel,cardWidth,index))},column);})})});
 }
 function AndroidTabletDaily({day}) {
   const viewport=Ns();
-  const scale=Math.min((viewport.w-100)/(Kn.daily.width*2+20),(viewport.h-72)/Kn.daily.height);
-  const dates=[E(k(D(day)??new Date(),-1)),day];
-  return H.jsx('div',{className:'android-tablet-spread',style:{position:'fixed',top:48,left:0,right:76,bottom:0,overflow:'auto',display:'flex',justifyContent:'center',alignItems:'center'},children:
-    H.jsx(Ts.Provider,{value:scale,children:H.jsxs('div',{style:{position:'relative',width:(Kn.daily.width*2+20)*scale,height:Kn.daily.height*scale},children:dates.map((date,index)=>H.jsxs('div',{
-      'data-tablet-day':date,'data-page-kind':'daily',style:{position:'absolute',left:index*(Kn.daily.width+20)*scale,top:0,width:Kn.daily.width,height:Kn.daily.height,transform:`scale(${scale})`,transformOrigin:'top left',background:'#fcfbf7',boxShadow:'0 2px 10px #0002'},children:[H.jsx(Ms,{kind:'daily'}),H.jsx(eu,{day:date,interactive:true})]
-    },date))})})});
+  const spread=viewport.w>viewport.h;
+  const dates=spread?[E(k(D(day)??new Date(),-1)),day]:[day];
+  const pageWidth=Kn.daily.width;
+  const gap=36;
+  const fullWidth=pageWidth*dates.length+(spread?gap:0);
+  const scale=spread?Math.min((viewport.w-120)/fullWidth,(viewport.h-72)/Kn.daily.height):(viewport.w-120)/820;
+  return H.jsx('div',{className:'android-tablet-spread',style:{position:'fixed',top:48,left:0,right:76,height:viewport.h-48,overflow:'auto',display:'flex',justifyContent:spread?'center':'flex-start',alignItems:'flex-start',paddingTop:12,paddingLeft:spread?0:12,boxSizing:'border-box'},children:
+    H.jsx(Ts.Provider,{value:scale,children:H.jsxs('div',{className:'android-tablet-page-turn',key:day,style:{position:'relative',flexShrink:0,width:fullWidth*scale,height:Kn.daily.height*scale,marginBottom:100},children:[...dates.map((date,index)=>H.jsxs('div',{
+      'data-tablet-day':date,'data-page-kind':'daily',style:{position:'absolute',left:index*(pageWidth+gap)*scale,top:0,width:pageWidth,height:Kn.daily.height,transform:`scale(${scale})`,transformOrigin:'top left',background:'#fcfbf7',boxShadow:'0 2px 10px #0002'},children:[H.jsx(Ms,{kind:'daily',hideHoles:spread}),H.jsx(eu,{day:date,interactive:true})]
+    },date)),...[-1,1].map(delta=>H.jsx('button',{'data-tablet-turn':delta,'aria-label':delta<0?'이전 날':'다음 날',onClick:()=>{wc();zd(k(D(day)??new Date(),delta));},style:{position:'absolute',bottom:4,[delta<0?'left':'right']:4,zIndex:5,width:40,height:40,border:'1px solid #dedbd2',borderRadius:20,background:'#fcfbf7',color:'#34343a',fontSize:24},children:delta<0?'‹':'›'},delta)),spread&&H.jsxs('svg',{'data-tablet-binding':'gold',width:fullWidth*scale,height:Kn.daily.height*scale,viewBox:`0 0 ${fullWidth} ${Kn.daily.height}`,style:{position:'absolute',inset:0,pointerEvents:'none',overflow:'visible'},children:[H.jsx('defs',{children:H.jsxs('linearGradient',{id:'tablet-gold-ring',x1:0,y1:0,x2:0,y2:1,children:[H.jsx('stop',{offset:0,stopColor:'#815a1d'}),H.jsx('stop',{offset:'.35',stopColor:'#f4dc8f'}),H.jsx('stop',{offset:'.65',stopColor:'#ba8b37'}),H.jsx('stop',{offset:1,stopColor:'#735019'})]})}),...Jn.holes('daily').map((hole,index)=>H.jsxs('g',{children:[H.jsx('rect',{x:pageWidth-24,y:hole.y,width:14,height:16,rx:3,fill:'#55514b'}),H.jsx('rect',{x:pageWidth+gap+10,y:hole.y,width:14,height:16,rx:3,fill:'#55514b'}),H.jsx('path',{d:`M${pageWidth-17} ${hole.y+8} C${pageWidth-12} ${hole.y-12} ${pageWidth+gap+12} ${hole.y-12} ${pageWidth+gap+17} ${hole.y+8}`,fill:'none',stroke:'url(#tablet-gold-ring)',strokeWidth:8,strokeLinecap:'round'})]},index))]})]})})});
 }
 function Gy() {
   const androidViewport = Ns();
@@ -28887,7 +28927,7 @@ function Gy() {
         e === `ready` &&
           !t &&
           n &&
-          (androidTablet && i==='daily' && s===null ? H.jsx(AndroidTabletDaily,{day:a}) : androidPortrait
+          (androidTablet && i==='daily' && s===null ? H.jsx(AndroidTabletDaily,{day:a}) : androidPortrait || androidTablet
             ? i === 'home' ? H.jsx(AndroidHomeStatistics,{}) : H.jsx(Pp,{kind:i,day:a,week:o,front:s,interactive:true})
             : (0, H.jsx)(Ym, { kind: i, day: a, week: o, front: s })),
         (0, H.jsx)(oy, {}),
@@ -32111,7 +32151,7 @@ function Zb() {
   (0, g.useEffect)(() => {
     e.shell.appInfo().then(n);
     let t = e.updates.onStatus(i);
-    return (e.snap.active || e.updates.check().catch(() => void 0), t);
+    return (e.snap.active || window.AndroidDayflow || e.updates.check().catch(() => void 0), t);
   }, [e]);
   let a =
     r.state !== `disabled` &&
@@ -32193,7 +32233,7 @@ function Zb() {
               (0, H.jsxs)(`div`, {
                 style: { fontSize: 12.5, color: Y.secondary, marginTop: 2 },
                 children: [
-                  `Windows 베타 · 버전 `,
+                  window.AndroidDayflow ? `Android · 버전 ` : `Windows 베타 · 버전 `,
                   t ? t.version : `…`,
                   t && !t.packaged ? ` · 개발 빌드` : ``,
                 ],
@@ -32209,7 +32249,7 @@ function Zb() {
           children: [
             (0, H.jsx)(pg, {
               title: Zg(r),
-              detail: `새 버전 확인 후 동의하면 다운로드하고 재시작합니다. 기록은 그대로예요.`,
+              detail: window.AndroidDayflow ? `새 버전 APK를 다운로드하고 Android 설치 화면에서 승인합니다. 기록과 동기화 연결은 유지됩니다.` : `새 버전 확인 후 동의하면 다운로드하고 재시작합니다. 기록은 그대로예요.`,
             }),
             r.state === `ready`
               ? (0, H.jsx)(mg, {
@@ -39435,7 +39475,7 @@ if (window.AndroidDayflow && wT === 'main') {
     const button=(label,action,active=false)=>H.jsx('button',{type:'button',onClick:action,className:active?'active':'',children:label},label);
     const mode=time=>{
       xs({tool:time?'highlighter':'pen'});
-      const stage=document.querySelector('.dayflow-planner-stage');
+      const stage=document.querySelector('.android-tablet-spread,.dayflow-planner-stage');
       stage?.scrollTo({left:time?stage.scrollWidth-stage.clientWidth:0,behavior:'smooth'});
     };
     return H.jsxs('div',{className:'android-toolbar-inner',children:kind==='daily'?[
@@ -39445,11 +39485,12 @@ if (window.AndroidDayflow && wT === 'main') {
       H.jsx('button',{type:'button',disabled:true,'aria-label':'실행 취소 준비 중',children:'↶'}),
       H.jsx('button',{type:'button',disabled:true,'aria-label':'다시 실행 준비 중',children:'↷'}),
       button('쓰기',()=>mode(false),tool==='pen'),button('시간',()=>mode(true),tool==='highlighter'),
+      H.jsx('span',{'data-ink-toolbar-slot':true}),
       button('⚙',()=>V().shell.openSettings()),
     ]:[
       ...['weekly','daily','home'].map((value,index)=>button(['주간','일간','홈'][index],()=>{if(value==='weekly') Bd(new Date()); else V().window.setKind(value); if(value==='weekly') window.dispatchEvent(new Event('dayflow-align-today'));},kind===value)),
       H.jsx('span',{className:'android-toolbar-book',children:book?.name??'Dayflow'}),
-      button('오늘',()=>{if(kind==='weekly'){Bd(new Date());window.dispatchEvent(new Event('dayflow-align-today'));}else zd(new Date());}),button('⚙',()=>V().shell.openSettings()),
+      button('오늘',()=>{if(kind==='weekly'){Bd(new Date());window.dispatchEvent(new Event('dayflow-align-today'));}else zd(new Date());}),H.jsx('span',{'data-ink-toolbar-slot':true}),button('⚙',()=>V().shell.openSettings()),
     ]});
   }
   const toolbarRoot=document.createElement('div');
@@ -39467,8 +39508,8 @@ if (window.AndroidDayflow && wT === 'main') {
       return () => query.removeEventListener('change', changed);
     }, []);
     const viewport=Ns();
-    const tablet=Math.min(viewport.w,viewport.h)>=600;
-    const edge = landscape || tablet ? 'right' : 'bottom';
+    const tablet=Math.min(screen.width,screen.height)>=600;
+    const edge = viewport.w>viewport.h || tablet ? 'right' : 'bottom';
     document.documentElement.dataset.androidPaletteEdge=edge;
     const category=Ss(state=>state.category);
     const tool=Ss(state=>state.tool);

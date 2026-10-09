@@ -88,6 +88,8 @@
 
 ## Task 4: 한글 손글씨 → 기존 입력칸
 
+**사용자 변경으로 취소 (2026-10-09):** 별도 인식창과 ML Kit는 제거한다. 기본 삼성 키보드 입력은 기존 텍스트 입력 경로를 사용한다. 자유 필기 저장과 동기화는 계속 구현한다.
+
 **Files:** Android `HandwritingRecognizer.kt`, `AndroidDayflowBridge.kt`, 새 `handwriting-input.js`, `app/build.gradle.kts`, 인식 결과 전달 회귀 테스트.
 
 **Interfaces:** `recognizeInk(requestId, strokesJson)` / `window.__dayflowInkResult(requestId,{candidates,error})`. 한국어 모델 `ko`를 기본으로 사용한다. 입력칸에 넣을 때 원래 selection 범위 뒤/선택 영역에 사용자 확인 후 삽입하고 input 이벤트를 전달한다.

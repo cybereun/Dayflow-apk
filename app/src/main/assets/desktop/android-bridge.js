@@ -18,6 +18,8 @@
   };
   const listeners = { status: new Set(), applied: new Set(), shared: new Set(), bus: new Set(), updates: new Set(), maximized: new Set(), tutorialClose: new Set() };
   const pendingFiles = new Map();
+  const pendingInk = new Map();
+  window.__dayflowInkResolve = (id,value) => {const item=pendingInk.get(id);if(!item)return;clearTimeout(item.timer);pendingInk.delete(id);value?.__error?item.reject(Error(value.__error)):item.resolve(value);};
   let lastApplied = Number(native.remoteApplyVersion());
   let lastStatus = '';
   let sharedState = invoke('sharedGet');
@@ -78,6 +80,7 @@
       revealDataDir: async () => undefined,
     },
     sync: {
+      inkCall: (action,arg={}) => new Promise((resolve,reject)=>{const id=crypto.randomUUID();const timer=setTimeout(()=>{pendingInk.delete(id);reject(Error('필기 서버 응답이 늦습니다. 원본은 유지합니다.'));},45000);pendingInk.set(id,{resolve,reject,timer});native.inkRequest(id,action,JSON.stringify(arg));}),
       call: (action, arg) => new Promise((resolve, reject) => {
         if (action === 'status') { resolve(syncState); return; }
         if (!commands.size) { reject(new Error('동기화 엔진을 준비하는 중입니다. 잠시 후 다시 시도해 주세요.')); return; }
@@ -121,9 +124,9 @@
       on: (callback) => (listeners.bus.add(callback), () => listeners.bus.delete(callback)),
     },
     updates: {
-      check: async () => ({ state: 'disabled', reason: 'android' }),
+      check: async () => { native.checkForUpdates(); return { state: 'idle' }; },
       install: () => undefined,
-      onStatus: (callback) => { callback({ state: 'disabled', reason: 'android' }); listeners.updates.add(callback); return () => listeners.updates.delete(callback); },
+      onStatus: (callback) => { callback({ state: 'idle' }); listeners.updates.add(callback); return () => listeners.updates.delete(callback); },
     },
     snap: { active: new URLSearchParams(location.search).get('view') === 'snap', ready: () => undefined },
     shell: {
