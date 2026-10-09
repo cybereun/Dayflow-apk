@@ -20,7 +20,7 @@ if (!(Test-Path $legacyStore)) { throw 'The existing legacy Android debug signin
 $plainPassword = [Text.Encoding]::UTF8.GetString([Security.Cryptography.ProtectedData]::Unprotect([IO.File]::ReadAllBytes($secretPath),$null,[Security.Cryptography.DataProtectionScope]::CurrentUser))
 $version = [regex]::Match((Get-Content -LiteralPath (Join-Path $source 'app\build.gradle.kts') -Raw),'versionName\s*=\s*"([0-9.]+)"').Groups[1].Value
 if (!$version) { throw 'Android versionName is missing.' }
-if ($version -ne '1.0.17') { throw 'This release script is scoped to the current Android v1.0.17 release.' }
+if ($version -ne '1.0.18') { throw 'This release script is scoped to the current Android v1.0.18 release.' }
 $null = New-Item -ItemType Directory -Path $StageDirectory -Force
 & robocopy $source $StageDirectory /E /XD .git .gradle .kotlin build artifacts .superpowers /XF local.properties /NFL /NDL /NJH /NJS /NP
 if ($LASTEXITCODE -ge 8) { throw 'ASCII release staging copy failed.' }

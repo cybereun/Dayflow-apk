@@ -31,13 +31,15 @@
     font-size: 11px !important;
     white-space: nowrap;
   }
-  body[data-android-view="settings"] #root > div > div {
+  body[data-android-view="settings"] #root > div > main {
     width: auto !important;
     min-width: 0 !important;
     min-height: 0 !important;
     padding: 16px !important;
-    flex: 1;
-    overflow-y: auto;
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 }
 #android-palette { position:fixed; z-index:800; }
@@ -53,11 +55,14 @@ html[data-android-palette-edge="right"] .android-statistics {right:96px!importan
 body[data-android-view="settings"] input,body[data-android-view="settings"] textarea,body[data-android-view="settings"] select {max-width:100%;box-sizing:border-box;}
 body[data-android-view="settings"] #root {max-width:100vw;overflow-x:hidden;}
 body[data-android-view="settings"] #root > div {height:var(--android-visual-height,100dvh)!important;min-height:0!important;overflow:hidden!important;}
-body[data-android-view="settings"] #root > div > div {min-height:0!important;max-height:calc(var(--android-visual-height,100dvh) - 12px)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
+body[data-android-view="settings"] #root > div > main {min-height:0!important;max-height:var(--android-visual-height,100dvh)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
 body[data-android-view="settings"] [role="dialog"],body[data-android-view="settings"] [data-keep-focus].no-drag {max-height:calc(var(--android-visual-height,100dvh) - 32px)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
 body[data-android-view="settings"] input:focus,body[data-android-view="settings"] textarea:focus,body[data-android-view="settings"] select:focus {scroll-margin-block:72px 24px;}
-body[data-android-view="settings"] #root > div > div::-webkit-scrollbar,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar {width:8px;}
-body[data-android-view="settings"] #root > div > div::-webkit-scrollbar-thumb,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar-thumb,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar-thumb {background:#9e9991;border-radius:6px;}
+body[data-android-view="settings"] #root > div > main::-webkit-scrollbar,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar {width:8px;}
+body[data-android-view="settings"] #root > div > main::-webkit-scrollbar-thumb,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar-thumb,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar-thumb {background:#9e9991;border-radius:6px;}
+body[data-android-view="settings"] [role="dialog"].android-ime-pinned {top:var(--android-dialog-top,8px)!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translateX(-50%)!important;width:min(320px,calc(100vw - 24px))!important;max-height:var(--android-dialog-max-height,calc(100dvh - 16px))!important;overflow-y:auto!important;z-index:100001!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
+body[data-android-view="settings"].android-ime-open nav[aria-label="설정 항목"] {display:flex!important;flex:0 0 44px!important;flex-flow:row nowrap!important;gap:4px!important;width:100%!important;height:44px!important;max-height:44px!important;min-height:44px!important;padding:4px!important;overflow-x:auto!important;overflow-y:hidden!important;}
+body[data-android-view="settings"].android-ime-open nav[aria-label="설정 항목"] button {flex:0 0 auto!important;width:max-content!important;min-width:max-content!important;min-height:34px!important;padding:4px 8px!important;white-space:nowrap!important;}
 [data-keep-focus].no-drag {max-width:calc(100vw - 24px)!important;box-sizing:border-box;overflow-y:auto;}
 html[data-android-palette-edge="bottom"] #android-palette>.pal {height:auto!important;overflow-x:auto!important;overflow-y:hidden!important;}
 html[data-android-palette-edge="right"] #android-palette>.pal {height:100%!important;overflow-x:hidden!important;overflow-y:auto!important;}
