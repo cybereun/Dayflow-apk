@@ -1,16 +1,16 @@
-# Dayflow Android · v1.0.16
+# Dayflow Android · v1.0.17
 
 [![개발자 cybereun](https://img.shields.io/badge/Developer-cybereun-236f70?style=for-the-badge&logo=github)](https://github.com/cybereun)
 ![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&logoColor=white)
-![버전](https://img.shields.io/badge/version-1.0.16-E0474C)
+![버전](https://img.shields.io/badge/version-1.0.17-E0474C)
 
 종이 플래너의 느낌을 휴대폰과 태블릿으로 옮긴 Dayflow입니다. Windows Dayflow의 디자인과 형광펜 중심 기록 방식을 유지하고 Android 터치 화면에 맞게 배치를 조정했습니다. 하나의 APK로 휴대폰과 태블릿을 지원합니다.
 
-> v1.0.16은 자유 필기와 암호화 동기화를 추가한 사용자 테스트용 릴리즈입니다. Windows에서 필기를 보려면 v1.0.18 이상을 함께 설치하세요.
+> v1.0.17은 안정 버전입니다. Windows에서 동기화된 필기를 보려면 Windows Dayflow v1.0.18 이상이 필요합니다.
 
 ## 다운로드
 
-[v1.0.16 릴리즈](https://github.com/cybereun/Dayflow-apk/releases/tag/v1.0.16)에서 `Dayflow-1.0.16.apk`를 내려받으세요. Android 8.0(API 26) 이상이 필요합니다.
+[v1.0.17 릴리즈](https://github.com/cybereun/Dayflow-apk/releases/tag/v1.0.17)에서 `Dayflow-1.0.17.apk`를 내려받으세요. Android 8.0(API 26) 이상이 필요합니다.
 
 같은 서명의 APK는 기존 설치 위에 업데이트할 수 있습니다. 개발용 debug APK와 release APK는 서명이 달라 설치가 거부될 수 있습니다. **기록 백업과 동기화 상태를 확인하기 전에 앱을 삭제하지 마세요.** 앱 삭제는 로컬 기록을 지울 수 있습니다.
 
@@ -33,11 +33,13 @@
 - S펜으로 일간·주간 종이 위에 직접 쓰고 색상·굵기를 선택합니다. 필기 설정은 팔레트가 아닌 상단 안내창 아래에 고정됩니다.
 - 부분 지우개, 획 지우개, 올가미 선택 삭제, 확인 후 현재 페이지 필기 지우기와 필기 되돌리기·다시 실행을 지원합니다. 기존 일정·텍스트는 지우지 않습니다.
 - 필기는 기기에 먼저 저장하고 같은 그룹의 기기에 암호화해 전달합니다. Windows에서는 읽기 전용으로 표시합니다.
-- v1.0.16부터 새 버전 확인 → 업데이트 알림 → APK 다운로드 동의 → Android 설치 승인 기능이 포함됩니다. 자동 무인 설치는 하지 않습니다.
+- v1.0.16부터 새 버전 확인 → 업데이트 알림 → APK 다운로드 동의 → Android 설치 승인 기능이 포함됩니다. 안정 릴리즈만 안내하며 자동 무인 설치는 하지 않습니다.
+- v1.0.17에서는 설정 입력칸이 키보드에 가려지지 않도록 화면 높이에 맞춰 설정창과 대화상자를 세로 스크롤할 수 있습니다.
+- v1.0.17 업데이트는 설치된 서명에 맞는 APK를 선택합니다. 기존 공식 설치본과 이전 개발 서명 설치본 모두 앱을 삭제하지 않고 업데이트할 수 있습니다.
 
 ## Windows ↔ Android 동기화
 
-Android 앱 버전은 **v1.0.16**, 자유 필기까지 함께 표시하는 Windows 버전은 **Dayflow v1.0.18**입니다. 이전 Windows v1.0.17은 기존 글자·시간표 동기화만 지원합니다.
+Android 앱 버전은 **v1.0.17**, 자유 필기까지 함께 표시하는 Windows 버전은 **Dayflow v1.0.19**입니다. 이전 Windows v1.0.17은 기존 글자·시간표 동기화만 지원합니다.
 
 ### 동기화 원리
 
@@ -64,6 +66,12 @@ v1.0.16 추가 확인: Android JS 23개, Windows 46개, 서버 24개 테스트 �
 
 남은 사용자 테스트: 휴대폰과 새 Windows 설치본을 함께 사용하는 전체 실사용 시나리오. Gradle 단위 테스트 실행기에는 기존 클래스 로딩 문제가 남아 있으며, 동일한 Kotlin 컴파일 결과를 직접 JVM에서 실행한 테스트 13개는 통과했습니다. 이를 Gradle 전체 테스트 성공으로 간주하지 않습니다.
 
+## v1.0.17 릴리즈 스토리
+
+설정에서 형광펜 이름처럼 입력칸을 편집할 때 Android 키보드가 화면을 덮던 문제를 개선했습니다. 키보드가 열리면 앱이 보이는 높이에 맞춰 설정 내용과 대화상자가 세로로 스크롤되고, 현재 입력 중인 칸도 화면 안으로 이동합니다.
+
+업데이트 기능은 테스트용 사전 릴리즈를 건너뛰고 안정 릴리즈만 안내합니다. 기존 공식 서명 설치본은 공식 APK로, 이전 개발 서명 설치본은 기존 서명과 호환되는 APK로 업데이트해 앱 삭제나 기록 초기화 없이 버전을 올립니다.
+
 ## v1.0.16 릴리즈 스토리
 
 종이에 쓴 손글씨를 같은 Dayflow 기기에서도 볼 수 있도록 자유 필기와 별도 암호화 동기화 경로를 추가했습니다. 실제 태블릿에서 발생하던 필기 깜빡임은 저장된 획을 매번 제거하지 않는 방식으로 개선했습니다. 지우개와 올가미, 되돌리기로 필기를 편집하면서 기존 일정은 유지합니다.
@@ -86,9 +94,9 @@ JDK 17 · Android SDK 35 · Gradle 8.9. 서명 키와 비밀번호는 저장소�
 node scripts/Test-OriginalSyncBridge.cjs
 node --test sync-server/cors.test.mjs
 gradle :app:assembleDebug
-powershell -ExecutionPolicy Bypass -File scripts/Build-Release.ps1
+powershell -ExecutionPolicy Bypass -File scripts/Build-DualSignatureRelease.ps1
 ```
 
-릴리즈 스크립트는 저장소 안에서 빌드하고 로컬 보호 저장소의 서명 키를 사용합니다. 결과는 `artifacts/Dayflow-1.0.16.apk`입니다. 다른 툴체인 환경에서는 `-Toolchain`을 지정하세요. 빌드 성공과 동작 검증은 별개입니다.
+`scripts/Build-DualSignatureRelease.ps1`은 ASCII 경로에 소스 사본을 만든 뒤 기존 공식 서명과 이전 개발 서명으로 각각 APK를 빌드합니다. 결과는 `artifacts/Dayflow-1.0.17.apk`와 `artifacts/Dayflow-1.0.17-debug-compat.apk`입니다. 툴체인 경로가 다르면 `-Toolchain`을 지정하세요. 빌드 성공과 실제 기기 동작 검증은 별개입니다.
 
 상세 문서: [Android 동기화 연동](docs/android-v17-integration.md). 글꼴 라이선스: [PoorStory OFL](licenses/PoorStory-OFL.txt).

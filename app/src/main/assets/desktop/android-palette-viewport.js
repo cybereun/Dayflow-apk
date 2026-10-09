@@ -1,9 +1,25 @@
 // Keep the original palette in screen space while the planner is pinch-zoomed.
 (() => {
+  const keepFocusedFieldVisible = () => {
+    const field=document.activeElement;
+    if(!field?.matches('input,textarea,select,[contenteditable="true"]')) return;
+    requestAnimationFrame(() => {
+      const viewport=window.visualViewport;
+      const visibleTop=viewport?.offsetTop??0;
+      const visibleBottom=visibleTop+(viewport?.height??innerHeight);
+      const rect=field.getBoundingClientRect();
+      const margin=24;
+      if(rect.bottom>visibleBottom-margin || rect.top<visibleTop+margin) {
+        field.scrollIntoView({block:rect.bottom>visibleBottom-margin?'end':'nearest',inline:'nearest',behavior:'smooth'});
+      }
+    });
+  };
   const update = () => {
+    const viewport = window.visualViewport;
+    const visibleHeight=Math.max(100,Math.min(innerHeight,viewport?.height??innerHeight));
+    document.documentElement.style.setProperty('--android-visual-height',`${visibleHeight}px`);
     const stage=document.querySelector('.android-tablet-spread,.dayflow-planner-stage');
     if(stage) {
-      const visibleHeight=Math.min(innerHeight,window.visualViewport?.height??innerHeight);
       const bottomCase=Math.min(screen.width,screen.height)<600 && innerWidth<innerHeight ? 90 : 0;
       const contentTop=parseFloat(document.documentElement.style.getPropertyValue('--android-content-top'))||48;
       stage.style.height=`${Math.max(100,visibleHeight-contentTop-bottomCase)}px`;
@@ -15,7 +31,6 @@
     }
     const root = document.getElementById('android-palette');
     if (!root) return;
-    const viewport = window.visualViewport;
     const scale = viewport?.scale ?? 1;
     const width = viewport?.width ?? innerWidth;
     const height = viewport?.height ?? innerHeight;
@@ -41,7 +56,12 @@
   window.visualViewport?.addEventListener('scroll', schedule);
   window.addEventListener('resize', schedule);
   window.addEventListener('dayflow-ink-layout',schedule);
-  document.addEventListener('focusin',()=>{schedule();setTimeout(schedule,350);setTimeout(schedule,700);});
+  document.addEventListener('focusin',()=>{
+    schedule();
+    setTimeout(schedule,120);setTimeout(schedule,350);setTimeout(schedule,700);
+    setTimeout(keepFocusedFieldVisible,120);setTimeout(keepFocusedFieldVisible,350);setTimeout(keepFocusedFieldVisible,700);
+  });
+  window.visualViewport?.addEventListener('resize',()=>{schedule();setTimeout(keepFocusedFieldVisible,80);});
   document.addEventListener('DOMContentLoaded', () => {
     new MutationObserver(schedule).observe(document.body,{childList:true});
     schedule();

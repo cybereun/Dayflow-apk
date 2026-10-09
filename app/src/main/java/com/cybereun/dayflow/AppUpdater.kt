@@ -55,17 +55,21 @@ class AppUpdater(private val activity: MainActivity) {
             val text = connection.inputStream.bufferedReader().use { it.readText() }
             check(text.length <= 2_000_000) { "Release feed too large" }
             val releases = JSONArray(text)
+            val signerSha256 = installedSignerSha256()
+            UpdatePolicy.assetName(BuildConfig.VERSION_NAME, signerSha256)
+                ?: error("현재 설치된 Dayflow 서명에 맞는 업데이트 경로가 없습니다. 앱을 삭제하지 말고 고객 지원에 문의해 주세요.")
             var best: Release? = null
             for (index in 0 until releases.length()) {
                 val item = releases.getJSONObject(index)
                 val tag = item.optString("tag_name")
-                if (item.optBoolean("draft") || !UpdatePolicy.isNewer(tag, BuildConfig.VERSION_NAME)) continue
+                if (item.optBoolean("draft") || item.optBoolean("prerelease") || !UpdatePolicy.isNewer(tag, BuildConfig.VERSION_NAME)) continue
+                val assetName = UpdatePolicy.assetName(tag, signerSha256) ?: continue
                 val assets = item.optJSONArray("assets") ?: continue
                 for (assetIndex in 0 until assets.length()) {
                     val asset = assets.getJSONObject(assetIndex)
                     val url = asset.optString("browser_download_url")
                     val size = asset.optLong("size")
-                    if (asset.optString("name") != "Dayflow-${tag.removePrefix("v")}.apk" || !UpdatePolicy.allowedAsset(url) || size !in 1..maxBytes) continue
+                    if (asset.optString("name") != assetName || !UpdatePolicy.allowedAsset(url) || size !in 1..maxBytes) continue
                     if (best == null || UpdatePolicy.isNewer(tag, best.tag)) best = Release(tag, url, size, asset.optString("digest"))
                 }
             }
@@ -113,6 +117,23 @@ class AppUpdater(private val activity: MainActivity) {
             } catch (e: Exception) { message(e.message ?: "다운로드에 실패했습니다. 다시 시도해 주세요.") }
             finally { busy = false; dialog.dismiss() }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun installedSignerSha256(): String? {
+        val packageInfo = if (android.os.Build.VERSION.SDK_INT >= 28) {
+            activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+        } else {
+            activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_SIGNATURES)
+        }
+        val signatures = if (android.os.Build.VERSION.SDK_INT >= 28) {
+            packageInfo.signingInfo?.apkContentsSigners?.toList().orEmpty()
+        } else {
+            packageInfo.signatures?.toList().orEmpty()
+        }
+        if (signatures.size != 1) return null
+        return MessageDigest.getInstance("SHA-256").digest(signatures.single().toByteArray())
+            .joinToString("") { "%02x".format(it) }
     }
 
     @Suppress("DEPRECATION")

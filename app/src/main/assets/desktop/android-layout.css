@@ -52,6 +52,12 @@ html[data-android-palette-edge="right"] .android-statistics {right:96px!importan
 .android-tablet-spread {scrollbar-width:auto;overscroll-behavior:contain;}
 body[data-android-view="settings"] input,body[data-android-view="settings"] textarea,body[data-android-view="settings"] select {max-width:100%;box-sizing:border-box;}
 body[data-android-view="settings"] #root {max-width:100vw;overflow-x:hidden;}
+body[data-android-view="settings"] #root > div {height:var(--android-visual-height,100dvh)!important;min-height:0!important;overflow:hidden!important;}
+body[data-android-view="settings"] #root > div > div {min-height:0!important;max-height:calc(var(--android-visual-height,100dvh) - 12px)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
+body[data-android-view="settings"] [role="dialog"],body[data-android-view="settings"] [data-keep-focus].no-drag {max-height:calc(var(--android-visual-height,100dvh) - 32px)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:auto;scrollbar-color:#9e9991 transparent;}
+body[data-android-view="settings"] input:focus,body[data-android-view="settings"] textarea:focus,body[data-android-view="settings"] select:focus {scroll-margin-block:72px 24px;}
+body[data-android-view="settings"] #root > div > div::-webkit-scrollbar,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar {width:8px;}
+body[data-android-view="settings"] #root > div > div::-webkit-scrollbar-thumb,body[data-android-view="settings"] [role="dialog"]::-webkit-scrollbar-thumb,body[data-android-view="settings"] [data-keep-focus].no-drag::-webkit-scrollbar-thumb {background:#9e9991;border-radius:6px;}
 [data-keep-focus].no-drag {max-width:calc(100vw - 24px)!important;box-sizing:border-box;overflow-y:auto;}
 html[data-android-palette-edge="bottom"] #android-palette>.pal {height:auto!important;overflow-x:auto!important;overflow-y:hidden!important;}
 html[data-android-palette-edge="right"] #android-palette>.pal {height:100%!important;overflow-x:hidden!important;overflow-y:auto!important;}
